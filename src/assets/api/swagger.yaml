@@ -18,7 +18,7 @@ paths:
       parameters:
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -26,16 +26,13 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
       responses:
         200:
           description: Successful response
           schema:
             type: array
             items:
-              $ref: "#/definitions/Client"
+              $ref: "#/definitions/ApiClient"
         400:
           description: Something went wrong
     post:
@@ -44,7 +41,7 @@ paths:
       parameters:
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -52,17 +49,16 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
         - name: client
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Client"
+            $ref: "#/definitions/ApiClient"
       responses:
         200:
           description: Successful response
+          schema:
+            $ref: "#/definitions/ApiClient"
         400:
           description: Something went wrong
   /clients/{clientId}:
@@ -78,7 +74,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -86,14 +82,11 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
       responses:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Client"
+            $ref: "#/definitions/ApiClient"
         400:
           description: Something went wrong
     put:
@@ -108,7 +101,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -116,14 +109,11 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
         - name: client
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Client"
+            $ref: "#/definitions/ApiClient"
       responses:
         200:
           description: Successful response
@@ -141,7 +131,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -149,14 +139,6 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
-        - name: client
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/Client"
       responses:
         200:
           description: Successful response
@@ -175,7 +157,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -183,21 +165,18 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
       responses:
         200:
           description: Successful response
           schema:
             type: array
             items:
-              $ref: "#/definitions/Record"
+              $ref: "#/definitions/ApiRecord"
         400:
           description: Something went wrong
     post:
       description: |
-        Creates a new 'Record' enitity for thr thw owning client
+        Creates a new 'Record' enitity for the owning client
       parameters:
         - name: clientId
           in: path
@@ -206,7 +185,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -214,17 +193,16 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
-        - name: client
+        - name: record
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Record"
+            $ref: "#/definitions/ApiRecord"
       responses:
         200:
           description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRecord"
         400:
           description: Something went wrong
   /clients/{clientId}/records/{recordId}:
@@ -245,7 +223,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -253,14 +231,11 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
       responses:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/Record"
+            $ref: "#/definitions/ApiRecord"
         400:
           description: Something went wrong
     put:
@@ -280,7 +255,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -288,14 +263,11 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
-        - name: client
+        - name: record
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Record"
+            $ref: "#/definitions/ApiRecord"
       responses:
         200:
           description: Successful response
@@ -318,7 +290,7 @@ paths:
           description: The ID of the client
         - name: x-key
           in: header
-          description: The encruption key
+          description: The encryption key
           required: true
           type: string
         - name: x-key-type
@@ -326,23 +298,15 @@ paths:
           description: The encryption key type
           required: true
           type: string
-          enum:
-            - CONSULTANT
-            - CLIENT
-        - name: client
-          in: body
-          required: true
-          schema:
-            $ref: "#/definitions/Record"
       responses:
         200:
           description: Successful response
         400:
           description: Something went wrong
-      
-      
+
+
 definitions:
-  Client:
+  ApiClient:
     type: object
     required:
       - fname
@@ -370,8 +334,8 @@ definitions:
       records:
         type: array
         items:
-          $ref: "#/definitions/Record"
-  Record:
+          $ref: "#/definitions/ApiRecord"
+  ApiRecord:
     type: object
     required:
       - name
@@ -392,6 +356,3 @@ definitions:
       updated_at:
         type: string
         description: The update date
-      client_id:
-        type: integer
-        description: The id of the owning client
