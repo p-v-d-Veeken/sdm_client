@@ -1,0 +1,397 @@
+swagger: '2.0'
+info:
+  version: "1.0.1"
+  title: Searchable Encrypted Database
+  description: |
+    The API for accessing a searchable encrpyted database/ This is part of a project for the Secure Data Management course.
+
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /clients:
+    get:
+      description: |
+        Retrieves an array of all 'Client' entities.
+        Only permitted by the consultant
+      parameters:
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Client"
+        400:
+          description: Something went wrong
+    post:
+      description: |
+        Creates a new 'Client' enitity
+      parameters:
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}:
+    get:
+      description: |
+        Retrieves a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Client"
+        400:
+          description: Something went wrong
+    put:
+      description: |
+        Updates a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+    delete:
+      description: |
+        Deletes a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Client"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records:
+    get:
+      description: |
+        Retrieves an array of all 'Record' entities owned by the client indicated with the clientId.
+        Only permitted by the consultant
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Record"
+        400:
+          description: Something went wrong
+    post:
+      description: |
+        Creates a new 'Record' enitity for thr thw owning client
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Record"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records/{recordId}:
+    get:
+      description: |
+        Retrieves a  'Record' entity owned by the client.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: recordId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Record"
+        400:
+          description: Something went wrong
+    put:
+      description: |
+        Updates a  'Record' entity owned by the client.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: recordId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Record"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+    delete:
+      description: |
+        Deletes a  'Record' entity owned by the client.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: recordId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: x-key
+          in: header
+          description: The encruption key
+          required: true
+          type: string
+        - name: x-key-type
+          in: header
+          description: The encryption key type
+          required: true
+          type: string
+          enum:
+            - CONSULTANT
+            - CLIENT
+        - name: client
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Record"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+      
+      
+definitions:
+  Client:
+    type: object
+    required:
+      - fname
+      - lname
+      - email
+    properties:
+      id:
+        type: integer
+        description: The id of the client
+      fname:
+        type: string
+        description: The first name of the client
+      lname:
+        type: string
+        description: The last name of the client
+      email:
+        type: string
+        description: The email of the client
+      created_at:
+        type: string
+        description: The creation date
+      updated_at:
+        type: string
+        description: The update date
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/Record"
+  Record:
+    type: object
+    required:
+      - name
+      - value
+    properties:
+      id:
+        type: integer
+        description: The id of the client
+      name:
+        type: string
+        description: The name of the record
+      value:
+        type: string
+        description: The value of the record
+      created_at:
+        type: string
+        description: The creation date
+      updated_at:
+        type: string
+        description: The update date
+      client_id:
+        type: integer
+        description: The id of the owning client
