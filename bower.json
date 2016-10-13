@@ -1,0 +1,36 @@
+{
+  "name": "sdm_client",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular-cookies": "~1.5.4",
+    "angular-resource": "~1.4.2",
+    "angular-ui-router": "~0.2.15",
+    "angular": "~1.5.8",
+    "font-awesome": "latest",
+    "angular-route": "latest",
+    "angular-sanitize": "latest",
+    "angular-ui-mask": "latest",
+    "angular-ui-select": "~0.13.2",
+    "angular-material": "latest",
+    "angular-animate": "^1.5.5",
+    "angular-aria": "^1.5.5",
+    "angular-messages": "^1.5.5",
+    "angular-sweetalert": "latest",
+    "ng-dialog": "^0.6.1"
+  },
+  "overrides": {
+    "font-awesome": {
+      "main": [
+        "scss/font-awesome.scss",
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.svg",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.woff2"
+      ]
+    }
+  },
+  "resolutions": {
+    "angular": "~1.5.8"
+  }
+}
