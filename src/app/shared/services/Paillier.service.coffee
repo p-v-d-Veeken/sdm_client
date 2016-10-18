@@ -31,13 +31,12 @@ angular.module 'vault'
       key = generateKey passwordHash, aesKey
       iv = CryptoJS.lib.WordArray.create data.slice(0, 16)
       encryptedKeyRing = CryptoJS.lib.WordArray.create data.slice(16, data.length)
-      keydata = CryptoJS.AES.decrypt(
+      this.keys = JSON.parse(CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
           {ciphertext: encryptedKeyRing}),
         CryptoJS.enc.Hex.parse(key),
         {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv})
-      .toString(CryptoJS.enc.Utf8)
-      this.keys = JSON.parse keydata
+      .toString(CryptoJS.enc.Utf8))
 
   class PublicKeyRing
     this.keys = {}
@@ -46,5 +45,14 @@ angular.module 'vault'
 
 
   class Paillier
-    privateKeyRing = new PrivateKeyRing()
-    publicKeyRing = new PublicKeyRing()
+    constructor: ->
+      this.privateKeyRing = new PrivateKeyRing()
+      this.publicKeyRing = new PublicKeyRing()
+
+    loadPublicKeys: (data) ->
+      this.publicKeyRing.load data
+
+    loadPrivateKeys: (password, aesKey, data) ->
+      this.privateKeyRing.load password, aesKey, data
+
+  return new Paillier()

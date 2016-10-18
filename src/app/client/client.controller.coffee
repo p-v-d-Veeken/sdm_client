@@ -1,3 +1,5 @@
 angular.module 'vault'
-.controller 'ClientController', ($scope) ->
+.controller 'ClientController', ($scope, Paillier) ->
   'ngInject'
+
+  console.log Paillier
