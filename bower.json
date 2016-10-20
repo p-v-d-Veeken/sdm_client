@@ -16,9 +16,30 @@
     "angular-aria": "^1.5.5",
     "angular-messages": "^1.5.5",
     "angular-sweetalert": "latest",
-    "ng-dialog": "^0.6.1"
+    "ng-dialog": "^0.6.1",
+    "cryptojslib": "git@github.com:sytelus/CryptoJS.git#~3.1.2",
+    "jsbn": "jsbn-angular#~1.4.0",
+    "jspaillier": "git@github.com:mhe/jspaillier.git"
   },
   "overrides": {
+    "cryptojslib": {
+      "main": [
+        "rollups/*"
+      ]
+    },
+    "jspaillier": {
+      "main": [
+        "paillier.js"
+      ]
+    },
+    "jsbn": {
+      "main": [
+        "jsbn.js",
+        "jsbn2.js",
+        "prng4.js",
+        "rng.js"
+      ]
+    },
     "font-awesome": {
       "main": [
         "scss/font-awesome.scss",
