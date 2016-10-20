@@ -2,22 +2,35 @@ angular.module 'vault'
 .factory 'Paillier', ->
   'ngInject'
 
+  parseHex = (data) ->
+    hex = []
+    data.forEach((c) ->
+      hex.push((c >>> 4).toString(16))
+      hex.push((c & 0xF).toString(16))
+    )
+    CryptoJS.enc.Hex.parse(hex.join(""))
+
   class PrivateKeyRing
     this.keys = {}
-    hashPassword: (password) ->
-      hash_triple = password.split ":"
+    validatePassword: (password, hash) ->
+      hash_triple = hash.split ":"
       iterations = hash_triple[0]
-      salt = CryptoJS.enc.Hex.parse hash_triple[1]
+      salt = CryptoJS.enc.Hex.parse(hash_triple[1])
       stored_hash = hash_triple[2]
-      first_hash = CryptoJS.PBKDF2 password, salt, {keySize: 256 / 32, iterations: iterations} .toString CryptoJS.enc.Hex
-      if stored_hash == CryptoJS.PBKDF2 first_hash, salt, {keySize: 256 / 32, iterations: iterations}
+      first_hash = CryptoJS.PBKDF2(password, salt,
+        keySize: 256 / 32
+        iterations: iterations).toString(CryptoJS.enc.Hex)
+      second_hash = CryptoJS.PBKDF2(first_hash, salt,
+        keySize: 256 / 32
+        iterations: iterations)
+      if stored_hash == second_hash.toString()
         first_hash
       else
         throw new Error("Invalid password")
 
     generateKey: (passwordHash, aesKey) ->
-      iv = CryptoJS.lib.WordArray.create aesKey.slice(0, 16)
-      key_enc = CryptoJS.lib.WordArray.create aesKey.slice(16, aesKey.length)
+      iv = parseHex aesKey.slice(0, 16)
+      key_enc = parseHex aesKey.slice(16, aesKey.length)
       CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
           {ciphertext: key_enc}),
@@ -25,12 +38,12 @@ angular.module 'vault'
         {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv})
       .toString(CryptoJS.enc.Hex)
 
-    load: (password, aesKey, data) ->
-      passwordHash = this.hashPassword password
+    load: (password, hash, aesKey, data) ->
+      passwordHash = this.validatePassword password, hash
       return if passwordHash == null
       key = this.generateKey passwordHash, aesKey
-      iv = CryptoJS.lib.WordArray.create data.slice(0, 16)
-      encryptedKeyRing = CryptoJS.lib.WordArray.create data.slice(16, data.length)
+      iv = parseHex data.slice(0, 16)
+      encryptedKeyRing = parseHex data.slice(16, data.length)
       this.keys = JSON.parse(CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
           {ciphertext: encryptedKeyRing}),
@@ -52,7 +65,7 @@ angular.module 'vault'
     loadPublicKeys: (data) ->
       this.publicKeyRing.load data
 
-    loadPrivateKeys: (password, aesKey, data) ->
-      this.privateKeyRing.load password, aesKey, data
+    loadPrivateKeys: (password, hash, aesKey, data) ->
+      this.privateKeyRing.load password, hash, aesKey, data
 
   return new Paillier()
