@@ -26,9 +26,9 @@ angular.module 'vault'
       .toString(CryptoJS.enc.Hex)
 
     load: (password, aesKey, data) ->
-      passwordHash = hashPassword password
+      passwordHash = this.hashPassword password
       return if passwordHash == null
-      key = generateKey passwordHash, aesKey
+      key = this.generateKey passwordHash, aesKey
       iv = CryptoJS.lib.WordArray.create data.slice(0, 16)
       encryptedKeyRing = CryptoJS.lib.WordArray.create data.slice(16, data.length)
       this.keys = JSON.parse(CryptoJS.AES.decrypt(

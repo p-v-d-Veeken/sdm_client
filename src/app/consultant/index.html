@@ -1,9 +1,13 @@
 <h1>Consultant</h1>
 
+<md-input-container>
+    <label>Password</label>
+    <input ng-model="password" ng-change="passwordChanged()">
+</md-input-container>
 <lf-ng-md-file-input lf-files='file.publicKeyRing' lf-placeholder="Public Keyring"> </lf-ng-md-file-input>
 <lf-ng-md-file-input lf-files='file.privateKeyRing' lf-placeholder="Private Keyring"> </lf-ng-md-file-input>
-<lf-ng-md-file-input lf-files='file.paillierKey' lf-placeholder="Paillier key"> </lf-ng-md-file-input>
+<lf-ng-md-file-input lf-files='file.aesKey' lf-placeholder="AES key"> </lf-ng-md-file-input>
 <lf-ng-md-file-input lf-files='file.encrypted' lf-placeholder="Encrypted file"> </lf-ng-md-file-input>
-
 <br>
+<md-button class="md-raised md-primary">Decrypt</md-button>
 <div>{{decrypted}}</div>
