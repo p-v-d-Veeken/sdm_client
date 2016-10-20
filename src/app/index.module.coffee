@@ -5,6 +5,7 @@ angular.module 'vault', [
   'ngCookies',
   'ngAria',
   'ngMaterial',
+  'lfNgMdFileInput',
   'ngMessages',
   'ui.mask',
   'ui.select',
