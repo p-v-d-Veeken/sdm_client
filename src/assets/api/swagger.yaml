@@ -26,6 +26,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
       responses:
         200:
           description: Successful response
@@ -49,6 +50,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
         - name: client
           in: body
           required: true
@@ -82,6 +84,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
       responses:
         200:
           description: Successful response
@@ -109,6 +112,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
         - name: client
           in: body
           required: true
@@ -139,6 +143,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
       responses:
         200:
           description: Successful response
@@ -165,6 +170,15 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
+        - name: query
+          in: body
+          required: true
+          description: The query to filter the records with
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Query"
       responses:
         200:
           description: Successful response
@@ -193,6 +207,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
         - name: record
           in: body
           required: true
@@ -206,38 +221,6 @@ paths:
         400:
           description: Something went wrong
   /clients/{clientId}/records/{recordId}:
-    get:
-      description: |
-        Retrieves a  'Record' entity owned by the client.
-        Only permitted by the consultant or the client itself
-      parameters:
-        - name: clientId
-          in: path
-          type: integer
-          required: true
-          description: The ID of the client
-        - name: recordId
-          in: path
-          type: integer
-          required: true
-          description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-      responses:
-        200:
-          description: Successful response
-          schema:
-            $ref: "#/definitions/ApiRecord"
-        400:
-          description: Something went wrong
     put:
       description: |
         Updates a  'Record' entity owned by the client.
@@ -263,6 +246,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
         - name: record
           in: body
           required: true
@@ -298,6 +282,7 @@ paths:
           description: The encryption key type
           required: true
           type: string
+          enum: ['CLIENT', 'CONSULTANT']
       responses:
         200:
           description: Successful response
@@ -306,6 +291,24 @@ paths:
 
 
 definitions:
+  Query:
+    type: object
+    required:
+      - column
+      - value
+      - operator
+    properties:
+      column:
+        type: string
+        description: The clumn you want to filter on
+        enum: ['KEY', 'VALUE']
+      value:
+        type: string
+        description: The value you want to compare the entry against, text for key and numeric for value
+      operator:
+        type: string
+        description: The operation to use for comparison
+        enum: ['<', '>=', '=']
   ApiClient:
     type: object
     required:
