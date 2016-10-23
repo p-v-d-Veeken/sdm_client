@@ -1,1 +1,18 @@
 <h1>Client</h1>
+<form name="keyringForm" layout="column" layout-align="center center">
+    <lf-ng-md-file-input name='keyringBundle' lf-files='keyringBundle' lf-placeholder="Keyring bundle"
+                         lf-drag-and-drop-label="Drop keyring bundle here" lf-browse-label="Search"
+                         lf-mimetype="application/zip" progress drag preview lf-api="filesApi">
+    </lf-ng-md-file-input>
+    <div ng-messages="keyringForm.keyringBundle.$error" style="color:red;">
+        <div ng-message="required">This is required.</div>
+        <div ng-message="maxcount">Too many files.</div>
+        <div ng-message="filesize">File size too large.</div>
+        <div ng-message="totalsize">Total size too large.</div>
+        <div ng-message="mimetype">Mimetype error.</div>
+    </div>
+    <md-input-container>
+        <label>Password</label>
+        <input ng-model="password" ng-change="passwordChanged()">
+    </md-input-container>
+</form>

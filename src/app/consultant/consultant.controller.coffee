@@ -105,9 +105,9 @@ angular.module 'vault'
             resolve()
           reader.readAsArrayBuffer file.lfFile
         else
-          reader.readAsText file.lfFile
           reader.onload = (e) ->
             $scope.data[destination] = e.target.result
             console.log destination + " loaded"
             resolve()
+          reader.readAsText file.lfFile
     )

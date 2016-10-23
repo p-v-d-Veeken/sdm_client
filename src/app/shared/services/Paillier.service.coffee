@@ -63,9 +63,21 @@ angular.module 'vault'
       this.publicKeyRing = new PublicKeyRing()
 
     loadPublicKeys: (data) ->
-      this.publicKeyRing.load data
+      $this = this
+      return new Promise (resolve, reject) ->
+        try
+          $this.publicKeyRing.load data
+          resolve()
+        catch e
+          reject e
 
     loadPrivateKeys: (password, hash, aesKey, data) ->
-      this.privateKeyRing.load password, hash, aesKey, data
+      $this = this
+      return new Promise (resolve, reject) ->
+        try
+          $this.privateKeyRing.load password, hash, aesKey, data
+          resolve()
+        catch e
+          reject e
 
   return new Paillier()
