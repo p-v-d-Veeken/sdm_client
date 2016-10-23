@@ -34,24 +34,16 @@ paths:
       description: |
         Creates a new 'Client' enitity
       parameters:
-        - name: client
+        - name: data
           in: body
           required: true
           schema:
-            $ref: "#/definitions/ApiClient"
+            $ref: "#/definitions/ClientBundle"
       responses:
         200:
           description: Successful response
           schema:
-            type: object
-            required:
-              - client
-              - keyring
-            properties:
-              client:
-                $ref: "#/definitions/ApiClient"
-              keyring:
-                $ref: '#/definitions/Keyring'
+            $ref: "#/definitions/ClientBundle"
         400:
           description: Something went wrong
   /clients/{clientId}:
@@ -91,15 +83,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            required:
-              - client
-              - keyring
-            properties:
-              client:
-                $ref: "#/definitions/ApiClient"
-              keyring:
-                $ref: '#/definitions/Keyring'
+            $ref: "#/definitions/ClientBundle"
       responses:
         200:
           description: Successful response
@@ -140,17 +124,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            required:
-              - query
-              - keyring
-            properties:
-              query:
-                type: array
-                items:
-                  $ref: "#/definitions/Query"
-              keyring:
-                $ref: '#/definitions/Keyring'
+            $ref: "#/definitions/QueryBundle"
       responses:
         200:
           description: Successful response
@@ -173,15 +147,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            required:
-              - record
-              - keyring
-            properties:
-              record:
-                $ref: "#/definitions/ApiRecord"
-              keyring:
-                $ref: '#/definitions/Keyring'
+            $ref: "#/definitions/RecordBundle"
       responses:
         200:
           description: Successful response
@@ -209,15 +175,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            required:
-              - record
-              - keyring
-            properties:
-              record:
-                $ref: "#/definitions/ApiRecord"
-              keyring:
-                $ref: '#/definitions/Keyring'
+            $ref: "#/definitions/RecordBundle"
       responses:
         200:
           description: Successful response
@@ -325,6 +283,38 @@ paths:
           description: Something went wrong
 
 definitions:
+  QueryBundle:
+    type: object
+    required:
+      - query
+      - keyring
+    properties:
+      query:
+        type: array
+        items:
+          $ref: "#/definitions/Query"
+      keyring:
+        $ref: '#/definitions/Keyring'
+  ClientBundle:
+    type: object
+    required:
+      - keyring
+      - client
+    properties:
+      client:
+        $ref: '#/definitions/ApiClient'
+      keyring:
+        $ref: '#/definitions/Keyring'
+  RecordBundle:
+    type: object
+    required:
+      - keyring
+      - record
+    properties:
+      record:
+        $ref: '#/definitions/ApiRecord'
+      keyring:
+        $ref: '#/definitions/Keyring'
   Keyring:
     type: object
     required:
