@@ -16,17 +16,11 @@ paths:
         Retrieves an array of all 'Client' entities.
         Only permitted by the consultant
       parameters:
-        - name: x-key
-          in: header
-          description: The encryption key
+        - name: keyring
+          in: body
           required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
+          schema:
+            $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -40,17 +34,6 @@ paths:
       description: |
         Creates a new 'Client' enitity
       parameters:
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
         - name: client
           in: body
           required: true
@@ -60,7 +43,15 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: "#/definitions/ApiClient"
+            type: object
+            required:
+              - client
+              - keyring
+            properties:
+              client:
+                $ref: "#/definitions/ApiClient"
+              keyring:
+                $ref: '#/definitions/Keyring'
         400:
           description: Something went wrong
   /clients/{clientId}:
@@ -74,17 +65,11 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
+        - name: keyring
+          in: body
           required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
+          schema:
+            $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -102,22 +87,19 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
-        - name: client
+        - name: data
           in: body
           required: true
           schema:
-            $ref: "#/definitions/ApiClient"
+            type: object
+            required:
+              - client
+              - keyring
+            properties:
+              client:
+                $ref: "#/definitions/ApiClient"
+              keyring:
+                $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -133,17 +115,11 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
+        - name: keyring
+          in: body
           required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
+          schema:
+            $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -160,25 +136,21 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
-        - name: query
+        - name: data
           in: body
           required: true
-          description: The query to filter the records with
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Query"
+            type: object
+            required:
+              - query
+              - keyring
+            properties:
+              query:
+                type: array
+                items:
+                  $ref: "#/definitions/Query"
+              keyring:
+                $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -197,22 +169,19 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
-        - name: record
+        - name: data
           in: body
           required: true
           schema:
-            $ref: "#/definitions/ApiRecord"
+            type: object
+            required:
+              - record
+              - keyring
+            properties:
+              record:
+                $ref: "#/definitions/ApiRecord"
+              keyring:
+                $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -236,22 +205,19 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
-          required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
-        - name: record
+        - name: data
           in: body
           required: true
           schema:
-            $ref: "#/definitions/ApiRecord"
+            type: object
+            required:
+              - record
+              - keyring
+            properties:
+              record:
+                $ref: "#/definitions/ApiRecord"
+              keyring:
+                $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
@@ -272,25 +238,125 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: x-key
-          in: header
-          description: The encryption key
+        - name: keyring
+          in: body
           required: true
-          type: string
-        - name: x-key-type
-          in: header
-          description: The encryption key type
-          required: true
-          type: string
-          enum: ['CLIENT', 'CONSULTANT']
+          schema:
+            $ref: '#/definitions/Keyring'
       responses:
         200:
           description: Successful response
         400:
           description: Something went wrong
-
+  /keyring:
+    post:
+      description: |
+        Call master keyring will be encrypted and stored on the server
+      consumes:
+        - application/zip
+      parameters:
+        - name: keyring
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Keyring'
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /keyring/retrieve/1:
+    get:
+      description: |
+        Call the master keyring retrieval method (step 1)
+      parameters:
+        - name: answer
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApiRetrievalAnswer"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRetrievalResponse"
+        400:
+          description: Something went wrong
+  /keyring/retrieve/2:
+    get:
+      description: |
+        Call the master keyring retrieval method (step 2)
+      parameters:
+        - name: answer
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApiRetrievalResponse"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRetrievalAnswer"
+        400:
+          description: Something went wrong
+  /keyring/retrieve/3:
+    get:
+      description: |
+        Call the master keyring retrieval method (step 3)
+      produces:
+        - application/zip
+      parameters:
+        - name: answer
+          in: query
+          required: true
+          type: string
+          description: Answer to the current step
+        - name: previous
+          in: query
+          required: true
+          type: string
+          description: The hashed answer to the previous step
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Keyring'
+        400:
+          description: Something went wrong
 
 definitions:
+  Keyring:
+    type: object
+    required:
+      - keyring
+    properties:
+      keyring:
+        type: string
+        description: The unlocked keyring
+  ApiRetrievalResponse:
+    type: object
+    required:
+      - hash
+    properties:
+      hash:
+        type: string
+        description: The hashed answer to the question if it is correct
+  ApiRetrievalAnswer:
+    type: object
+    required:
+      - step
+      - answer
+      - previous
+    properties:
+      step:
+        type: integer
+        description: The current step in the process (out of 3)
+      answer:
+        type: string
+        description: Answer to the current step
+      previous:
+        type: string
+        description: The hashed answer to the previous step
   Query:
     type: object
     required:
@@ -334,10 +400,6 @@ definitions:
       updated_at:
         type: string
         description: The update date
-      records:
-        type: array
-        items:
-          $ref: "#/definitions/ApiRecord"
   ApiRecord:
     type: object
     required:
