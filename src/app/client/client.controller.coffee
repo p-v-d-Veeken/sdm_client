@@ -9,6 +9,14 @@ angular.module 'vault'
   $scope.filesApi = null
   $scope.errors = {}
 
+  $scope.types = {"Key","Value"}
+  $scope.equations = {"Equal","Smaller","Greater or equal"}
+
+  $scope.constraints = []
+
+  $scope.addItem = (constraint)->
+    $scope.constraints.push(angular.copy(constraint))
+
   loadPrivateKeyRing = ->
     if privateKeyringData.aesKey? && privateKeyringData.privateKeyRing? && privateKeyringData.hash? && $scope.password.length > 0
       Paillier.loadPrivateKeys $scope.password, privateKeyringData.hash, privateKeyringData.aesKey, privateKeyringData.privateKeyRing
