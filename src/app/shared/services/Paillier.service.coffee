@@ -67,6 +67,7 @@ angular.module 'vault'
       return new Promise (resolve, reject) ->
         try
           $this.publicKeyRing.load data
+          console.log "Public key loaded"
           resolve()
         catch e
           reject e
@@ -76,6 +77,7 @@ angular.module 'vault'
       return new Promise (resolve, reject) ->
         try
           $this.privateKeyRing.load password, hash, aesKey, data
+          console.log "Private key loaded"
           resolve()
         catch e
           reject e

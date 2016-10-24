@@ -1,45 +1,34 @@
 <div layout="column" layout-align="center center">
-    <lf-ng-md-file-input name='keyringBundle' lf-files='keyringBundle' lf-placeholder="Keyring bundle"
-                         lf-drag-and-drop-label="Drop keyring bundle here" lf-browse-label="Search"
-                         progress drag lf-api="filesApi">
-    </lf-ng-md-file-input>
-    <div class="error-container">
-        <div ng-repeat="(key, value) in errors" class="error">
-            <span class="error-key">{{key}}</span>
-            <span class="error-value">{{value}}</span>
+    <keyring-handler on-private-keyring="privateKeyringLoaded" on-public-keyring="publicKeyringLoaded" paillier="paillier"></keyring-handler>
+
+    <form>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm="">
+                <label>Type</label>
+                <md-select ng-model="search.type">
+                    <md-option ng-repeat="type in types" value="{{type}}">
+                        {{type}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm="">
+                <label>Compare</label>
+                <md-select ng-model="search.equation">
+                    <md-option ng-repeat="equation in equations" value="{{equation}}">
+                        {{equation}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm="">
+                <label>Compare to</label>
+                <input ng-model="search.compare">
+            </md-input-container>
+
         </div>
-    </div>
-    <md-input-container>
-        <label>Password</label>
-        <input ng-model="password" ng-change="passwordChanged()">
-    </md-input-container>
-
-    <div layout-gt-sm="row">
-      <md-input-container class="md-block" flex-gt-sm="">
-        <label>Type</label>
-        <md-select ng-model="search.type">
-          <md-option ng-repeat="type in types" value="{{type}}">
-            {{type}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-
-      <md-input-container class="md-block" flex-gt-sm="">
-        <label>Compare</label>
-        <md-select ng-model="search.equation">
-          <md-option ng-repeat="equation in equations" value="{{equation}}">
-            {{equation}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-
-      <md-input-container class="md-block" flex-gt-sm="">
-        <label>Compare to</label>
-        <input ng-model="search.compare">
-      </md-input-container>
-
-    </div>
-    <md-button class="md-raised md-primary" ng-click="addItem(search)">Add</md-button>
+        <md-button class="md-raised md-primary" ng-click="addItem(search)">Add</md-button>
+    </form>
 
     <table id="table" class="table table-hover table-mc-light-blue" ng-show="constraints.length">
      <thead>
