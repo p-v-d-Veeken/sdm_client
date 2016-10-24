@@ -1,4 +1,3 @@
-<h1>Client</h1>
 <div layout="column" layout-align="center center">
     <lf-ng-md-file-input name='keyringBundle' lf-files='keyringBundle' lf-placeholder="Keyring bundle"
                          lf-drag-and-drop-label="Drop keyring bundle here" lf-browse-label="Search"
@@ -14,4 +13,48 @@
         <label>Password</label>
         <input ng-model="password" ng-change="passwordChanged()">
     </md-input-container>
+
+    <div layout-gt-sm="row">
+      <md-input-container class="md-block" flex-gt-sm="">
+        <label>Type</label>
+        <md-select ng-model="search.type">
+          <md-option ng-repeat="type in types" value="{{type}}">
+            {{type}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container class="md-block" flex-gt-sm="">
+        <label>Compare</label>
+        <md-select ng-model="search.equation">
+          <md-option ng-repeat="equation in equations" value="{{equation}}">
+            {{equation}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container class="md-block" flex-gt-sm="">
+        <label>Compare to</label>
+        <input ng-model="search.compare">
+      </md-input-container>
+
+    </div>
+    <md-button class="md-raised md-primary" ng-click="addItem(search)">Add</md-button>
+
+    <table id="table" class="table table-hover table-mc-light-blue" ng-show="constraints.length">
+     <thead>
+       <tr>
+         <th>Type</th>
+         <th>Compare</th>
+         <th>To</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr ng-repeat="constraint in constraints">
+         <td data-title="Type">{{constraint.type}}</td>
+         <td data-title="Compare">{{constraint.equation}}</td>
+         <td data-title="To">{{constraint.compare}}</td>
+       </tr>
+      </tbody>
+    </table>
 </div>
