@@ -42,7 +42,6 @@ angular.module 'vault'
         CryptoJS.enc.Hex.parse(this.aesKey.get('key')),
         {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: this._iv})
       .toString(CryptoJS.enc.Utf8))
-      console.log this.keys
       this._loaded = true
 
     toByteArray: ->
