@@ -10,5 +10,6 @@ angular.module 'vault', [
   'ui.mask',
   'ui.select',
   'oitozero.ngSweetAlert',
-  'ngDialog'
+  'ngDialog',
+  'md.data.table'
 ]

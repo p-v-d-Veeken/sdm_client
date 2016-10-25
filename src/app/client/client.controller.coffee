@@ -32,6 +32,7 @@ angular.module 'vault'
     $scope.equations = $scope.types[$scope.search.type].equations if $scope.types[$scope.search.type]?
 
   $scope.addItem = (constraint)->
+    $scope.search = {}
     $scope.constraints.push(angular.copy(constraint))
     
   $scope.privateKeyringLoaded = ->
