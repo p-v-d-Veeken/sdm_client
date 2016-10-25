@@ -8,6 +8,7 @@ angular.module 'vault'
   $scope.keyringForm = null
   $scope.filesApi = null
   $scope.errors = {}
+  $scope.selected = []
 
   $scope.types = {"Key","Value"}
   $scope.equations = {"Equal","Smaller","Greater or equal"}
@@ -15,6 +16,7 @@ angular.module 'vault'
   $scope.constraints = []
 
   $scope.addItem = (constraint)->
+    $scope.search = {}
     $scope.constraints.push(angular.copy(constraint))
 
   loadPrivateKeyRing = ->
