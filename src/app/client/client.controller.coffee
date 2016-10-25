@@ -3,7 +3,7 @@ angular.module 'vault'
   'ngInject'
 
   $scope.paillier = Paillier
-  
+
   $scope.types = {
     "KEY": {
       name: "Key"
@@ -26,7 +26,7 @@ angular.module 'vault'
   }
 
   $scope.constraints = []
-  
+
   $scope.updateQuery = ->
     $scope.search.set = $scope.search.type? && $scope.search.type.length > 0
     $scope.equations = $scope.types[$scope.search.type].equations if $scope.types[$scope.search.type]?
