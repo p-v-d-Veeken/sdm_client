@@ -1,5 +1,5 @@
 angular.module 'vault'
-.factory 'Paillier', ->
+.factory 'Paillier', (HashedPassword, AESKey) ->
   'ngInject'
 
   parseHex = (data) ->
@@ -11,50 +11,47 @@ angular.module 'vault'
     CryptoJS.enc.Hex.parse(hex.join(""))
 
   class PrivateKeyRing
+    this._loaded = false
+    this._iv = ''
+    this._enc_keyring = ''
     this.keys = {}
-    validatePassword: (password, hash) ->
-      hash_triple = hash.split ":"
-      iterations = hash_triple[0]
-      salt = CryptoJS.enc.Hex.parse(hash_triple[1])
-      stored_hash = hash_triple[2]
-      first_hash = CryptoJS.PBKDF2(password, salt,
-        keySize: 256 / 32
-        iterations: iterations).toString(CryptoJS.enc.Hex)
-      second_hash = CryptoJS.PBKDF2(first_hash, salt,
-        keySize: 256 / 32
-        iterations: iterations)
-      if stored_hash == second_hash.toString()
-        first_hash
-      else
-        throw new Error("Invalid password")
+    this.hashedPassword = null
+    this.aesKey = null
 
-    generateKey: (passwordHash, aesKey) ->
-      iv = parseHex aesKey.slice(0, 16)
-      key_enc = parseHex aesKey.slice(16, aesKey.length)
-      CryptoJS.AES.decrypt(
-        CryptoJS.lib.CipherParams.create(
-          {ciphertext: key_enc}),
-        CryptoJS.enc.Hex.parse(passwordHash),
-        {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv})
-      .toString(CryptoJS.enc.Hex)
+    isLoaded: ->
+      this._loaded
 
     load: (password, hash, aesKey, data) ->
-      passwordHash = this.validatePassword password, hash
-      return if passwordHash == null
-      key = this.generateKey passwordHash, aesKey
-      iv = parseHex data.slice(0, 16)
-      encryptedKeyRing = parseHex data.slice(16, data.length)
+      this.hashedPassword = new HashedPassword hash
+      this.hashedPassword.validate password
+      this.aesKey = new AESKey aesKey
+      this.aesKey.decrypt this.hashedPassword.get('hash')
+      this._iv = parseHex data.slice(0, 16)
+      this._enc_keyring = parseHex data.slice(16, data.length)
       this.keys = JSON.parse(CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
-          {ciphertext: encryptedKeyRing}),
-        CryptoJS.enc.Hex.parse(key),
-        {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: iv})
+          {ciphertext: this._enc_keyring}),
+        CryptoJS.enc.Hex.parse(this.aesKey.get('key')),
+        {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: this._iv})
       .toString(CryptoJS.enc.Utf8))
+      this._loaded = true
+
+    toString: ->
+      # TODO
 
   class PublicKeyRing
+    this._loaded = false
     this.keys = {}
+
+    isLoaded: ->
+      this._loaded
+
+    toString: ->
+      JSON.stringify this.keys
+
     load: (data) ->
       this.keys = JSON.parse data
+      this._loaded = true
 
 
   class Paillier
@@ -82,4 +79,4 @@ angular.module 'vault'
         catch e
           reject e
 
-  return new Paillier()
+  new Paillier()

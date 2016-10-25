@@ -31,7 +31,18 @@ angular.module 'vault'
         loadPrivateKeyRing()
       , 500)
 
-    # TODO re-encrypt and stuff here
+    $scope.bundleKeyring = ->
+      if $scope.paillier.publicKeyRing.isLoaded() && $scope.paillier.privateKeyRing.isLoaded()
+        zip = new JSZip()
+        zip.file "pass_hash.pai", $scope.paillier.privateKeyRing.hashedPassword.toString()
+#        zip.file "key.pai", $scope.paillier.privateKeyRing.aesKey.toString()
+#        zip.file "sk_ring.pai", $scope.paillier.privateKeyRing.toString()
+        zip.file "pk_ring.pai", $scope.paillier.publicKeyRing.toString()
+        zip.generateAsync({type:"blob"}).then((blob) ->
+          saveAs blob, "keys.bundle"
+        , (err) ->
+          console.error err
+        )
 
     $scope.$watchCollection 'keyringBundle', ->
       $scope.loaded = false
