@@ -1,22 +1,6 @@
 angular.module 'vault'
-.factory 'AESKey', ->
+.factory 'AESKey', (HexHandler) ->
   'ngInject'
-
-  parseHex = (data) ->
-    hex = []
-    data.forEach((c) ->
-      hex.push((c >>> 4).toString(16))
-      hex.push((c & 0xF).toString(16))
-    )
-    CryptoJS.enc.Hex.parse(hex.join(""))
-
-  toHex = (data) ->
-    bytes = []
-    c = 0
-    while c < data.length
-      bytes.push parseInt(data.substr(c, 2), 16)
-      c += 2
-    bytes
 
   class AESKey
     this._iv = ''
@@ -24,8 +8,8 @@ angular.module 'vault'
     this._key = ''
 
     constructor: (keystring) ->
-      this._iv = parseHex keystring.slice(0, 16)
-      this._key_enc = parseHex keystring.slice(16, keystring.length)
+      this._iv = HexHandler.parseHex keystring.slice(0, 16)
+      this._key_enc = HexHandler.parseHex keystring.slice(16, keystring.length)
 
     decrypt: (hash) ->
       this._key = CryptoJS.AES.decrypt(
@@ -51,6 +35,6 @@ angular.module 'vault'
         else throw new Error 'Illegal argument'
 
     toByteArray: ->
-      toHex(this._iv.toString()).concat toHex(this._key_enc.toString())
+      HexHandler.toHex(this._iv.toString()).concat HexHandler.toHex(this._key_enc.toString())
 
   AESKey
