@@ -10,6 +10,14 @@ angular.module 'vault'
     )
     CryptoJS.enc.Hex.parse(hex.join(""))
 
+  toHex = (data) ->
+    bytes = []
+    c = 0
+    while c < data.length
+      bytes.push parseInt(data.substr(c, 2), 16)
+      c += 2
+    bytes
+
   class AESKey
     this._iv = ''
     this._key_enc = ''
@@ -42,7 +50,7 @@ angular.module 'vault'
         when 'key' then this._key
         else throw new Error 'Illegal argument'
 
-    toString: ->
-      # TODO
+    toByteArray: ->
+      toHex(this._iv.toString()).concat toHex(this._key_enc.toString())
 
   AESKey

@@ -10,6 +10,14 @@ angular.module 'vault'
     )
     CryptoJS.enc.Hex.parse(hex.join(""))
 
+  toHex = (data) ->
+    bytes = []
+    c = 0
+    while c < data.length
+      bytes.push parseInt(data.substr(c, 2), 16)
+      c += 2
+    bytes
+
   class PrivateKeyRing
     this._loaded = false
     this._iv = ''
@@ -34,10 +42,11 @@ angular.module 'vault'
         CryptoJS.enc.Hex.parse(this.aesKey.get('key')),
         {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: this._iv})
       .toString(CryptoJS.enc.Utf8))
+      console.log this.keys
       this._loaded = true
 
-    toString: ->
-      # TODO
+    toByteArray: ->
+      toHex(this._iv.toString()).concat toHex(this._enc_keyring.toString())
 
   class PublicKeyRing
     this._loaded = false
