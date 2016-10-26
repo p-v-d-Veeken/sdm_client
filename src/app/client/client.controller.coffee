@@ -38,6 +38,7 @@ angular.module 'vault'
 
   $scope.deleteConstraint = (index) ->
     $scope.constraints = $scope.constraints.splice index, 1
+    $scope.constraints = [] if $scope.constraints.length < 2
     
   $scope.privateKeyringLoaded = ->
 
