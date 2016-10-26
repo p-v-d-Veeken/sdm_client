@@ -1,7 +1,7 @@
 <div layout="column" layout-align="center center">
     <keyring-handler on-private-keyring="privateKeyringLoaded" on-public-keyring="publicKeyringLoaded" paillier="paillier"></keyring-handler>
 
-    <form>
+    <form ng-submit="addItem()">
         <div layout="row">
             <md-input-container>
                 <label>Type</label>
@@ -29,23 +29,31 @@
             </md-input-container>
         </div>
 
-        <md-button class="md-raised md-primary" ng-click="addItem(search)">Add</md-button>
+        <button type="submit" md-button class="md-raised md-primary" ng-click="addItem()">Add</button>
     </form>
 
-    <table id="table" class="table table-hover table-mc-light-blue" ng-show="constraints.length">
-     <thead>
-       <tr>
-         <th>Type</th>
-         <th>Compare</th>
-         <th>To</th>
-       </tr>
-     </thead>
-     <tbody>
-       <tr ng-repeat="constraint in constraints">
-         <td data-title="Type">{{constraint.type}}</td>
-         <td data-title="Compare">{{constraint.equation}}</td>
-         <td data-title="To">{{constraint.compare}}</td>
-       </tr>
-      </tbody>
-    </table>
+    <md-table-container>
+      <table md-table>
+        <thead md-head>
+          <tr md-row>
+            <th md-column>Type</th>
+            <th md-column>Compare</th>
+            <th md-column>To</th>
+            <th md-column></th>
+          </tr>
+        </thead>
+        <tbody md-body>
+          <tr md-row ng-repeat="constraint in constraints">
+            <td md-cell>{{constraint.type}}</td>
+            <td md-cell>{{constraint.equation}}</td>
+            <td md-cell>{{constraint.compare}}</td>
+            <td md-cell>
+                <md-button class="md-icon-button" aria-label="More" ng-click="deleteConstraint($index)">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </md-button>
+            </td>
+          </tr>
+         </tbody>
+      </table>
+    </md-table-container>
 </div>

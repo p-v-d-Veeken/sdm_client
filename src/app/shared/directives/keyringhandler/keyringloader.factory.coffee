@@ -11,7 +11,7 @@ angular.module 'vault'
     $scope.keyringBundle = []
     $scope.filesApi = null
     $scope.errors = {}
-    $scope.loaded = false
+    $scope._loaded = false
     fileData = {}
     $scope.password = ''
 
@@ -45,7 +45,7 @@ angular.module 'vault'
         )
 
     $scope.$watchCollection 'keyringBundle', ->
-      $scope.loaded = false
+      $scope._loaded = false
       if $scope.keyringBundle[0]?
         if $scope.keyringBundle[0].lfFileName.indexOf('.bundle') != -1
           delete $scope.errors['filetype']
