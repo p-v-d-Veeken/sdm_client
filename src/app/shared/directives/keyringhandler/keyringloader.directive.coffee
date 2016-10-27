@@ -1,5 +1,5 @@
 angular.module 'vault'
-.directive 'keyringHandler', ($timeout) ->
+.directive 'keyringHandler', ($timeout, $mdToast) ->
   'ngInject'
   restrict: 'E'
   templateUrl: 'app/shared/directives/keyringhandler/index.html'
@@ -21,7 +21,8 @@ angular.module 'vault'
         .then ->
           $scope.onPrivateKeyring()
         .catch (e) ->
-          throw e
+          $mdToast.show $mdToast.simple().textContent(e.message).hideDelay(3000)
+          console.log e
 
     passwordTimeout = null
     $scope.passwordChanged = ->
@@ -43,6 +44,8 @@ angular.module 'vault'
         , (err) ->
           console.error err
         )
+      else
+        $mdToast.show $mdToast.simple().textContent("Key bundle not loaded and/or unlocked.").hideDelay(3000)
 
     $scope.$watchCollection 'keyringBundle', ->
       $scope._loaded = false
@@ -55,7 +58,7 @@ angular.module 'vault'
               fileData['pk_ring.pai'] = publicKeyRing
               $scope.paillier.loadPublicKeys fileData['pk_ring.pai']
               .then ->
-                $scope.onPrivateKeyring()
+                $scope.onPublicKeyring()
               .catch (e) ->
                 throw e
             zip.files['pass_hash.pai'].async("string").then (hash) ->

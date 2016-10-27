@@ -69,6 +69,6 @@ angular.module 'vault'
           console.log "Private key loaded"
           resolve()
         catch e
-          reject e
+          reject(e)
 
   new Paillier()
