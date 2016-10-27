@@ -18,4 +18,13 @@ angular.module 'vault'
     modPow: (base, exp, mod) ->
       base.modPow(exp, mod)
 
+    randomBigInt: (n, bits) ->
+      r = undefined
+      rng = new SecureRandom
+      loop
+        r = new BigInteger bits, rng
+        unless r.compareTo @n >= 0
+          break
+      r
+
   new BigIntegerUtil()
