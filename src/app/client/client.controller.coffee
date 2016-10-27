@@ -28,6 +28,8 @@ angular.module 'vault'
     set: false
   }
 
+  $scope.phrase = ''
+
   $scope.constraints = []
 
   $scope.updateQuery = ->
@@ -42,7 +44,10 @@ angular.module 'vault'
   $scope.deleteConstraint = (index) ->
     $scope.constraints = $scope.constraints.splice index, 1
     $scope.constraints = [] if $scope.constraints.length < 2
-    
+
+  $scope.test_phrase = ->
+    console.log($scope.phrase)
+
   $scope.privateKeyringLoaded = ->
     console.log new BigInteger(EncodingHelper.string2bin(window.atob($scope.paillier.privateKeyRing.keys['0'].lambda))).toString()
 
