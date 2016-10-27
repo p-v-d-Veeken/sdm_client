@@ -3,12 +3,13 @@ angular.module 'vault'
   'ngInject'
 
   class PrivateKeyRing
-    this._loaded = false
-    this._iv = ''
-    this._enc_keyring = ''
-    this.keys = {}
-    this.hashedPassword = null
-    this.aesKey = null
+    constructor: ->
+      this._loaded = false
+      this._iv = ''
+      this._enc_keyring = ''
+      this.keys = {}
+      this.hashedPassword = null
+      this.aesKey = null
 
     isLoaded: ->
       this._loaded
@@ -34,8 +35,10 @@ angular.module 'vault'
       EncodingHelper.hex2bin(this._iv.toString()).concat EncodingHelper.hex2bin(this._enc_keyring.toString())
 
   class PublicKeyRing
-    this._loaded = false
-    this.keys = {}
+
+    constructor: ->
+      this._loaded = false
+      this.keys = {}
 
     isLoaded: ->
       this._loaded
@@ -59,6 +62,7 @@ angular.module 'vault'
       $this = this
       return new Promise (resolve, reject) ->
         try
+          $this.publicKeyRing = new PublicKeyRing()
           $this.publicKeyRing.load data
           console.log "Public key loaded"
           resolve()
@@ -69,6 +73,7 @@ angular.module 'vault'
       $this = this
       return new Promise (resolve, reject) ->
         try
+          $this.privateKeyRing = new PrivateKeyRing()
           $this.privateKeyRing.load password, hash, aesKey, data
           console.log "Private key loaded"
           resolve()
