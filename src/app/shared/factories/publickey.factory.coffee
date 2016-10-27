@@ -10,7 +10,7 @@ angular.module 'vault'
       @n = new BigInteger n_buffer
       @bits = (n_buffer.length - 1) * byte_length
       @n2 = @n.square()
-      @np1 = @n.add BigInteger.ONE
+      @g = @n.add BigInteger.ONE
       @rncache = new Array()
 
     add: (a, b) ->
