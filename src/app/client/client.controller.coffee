@@ -1,8 +1,8 @@
 angular.module 'vault'
-.controller 'ClientController', ($scope, Paillier) ->
+.controller 'ClientController', ($scope, PaillierHandler, EncodingHelper) ->
   'ngInject'
 
-  $scope.paillier = Paillier
+  $scope.paillier = PaillierHandler
 
   $scope.types = {
     "KEY": {
@@ -44,5 +44,12 @@ angular.module 'vault'
     $scope.constraints = [] if $scope.constraints.length < 2
     
   $scope.privateKeyringLoaded = ->
+    console.log new BigInteger(EncodingHelper.string2bin(window.atob($scope.paillier.privateKeyRing.keys['0'].lambda))).toString()
 
   $scope.publicKeyringLoaded = ->
+
+
+
+  $scope.phrase = ''
+  $scope.test_phrase = ->
+    console.log $scope.phrase

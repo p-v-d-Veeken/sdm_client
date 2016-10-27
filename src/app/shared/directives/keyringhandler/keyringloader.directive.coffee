@@ -19,18 +19,15 @@ angular.module 'vault'
       if fileData["key.pai"]? && fileData["sk_ring.pai"]? && fileData["pass_hash.pai"]? && $scope.password.length > 0
         $scope.paillier.loadPrivateKeys $scope.password, fileData["pass_hash.pai"], fileData["key.pai"], fileData["sk_ring.pai"]
         .then ->
+          $mdToast.show $mdToast.simple().textContent('Private keyring loaded').hideDelay(3000)
           $scope.onPrivateKeyring()
         .catch (e) ->
           $mdToast.show $mdToast.simple().textContent(e.message).hideDelay(3000)
           console.log e
 
-    passwordTimeout = null
-    $scope.passwordChanged = ->
-      if passwordTimeout?
-        $timeout.cancel passwordTimeout
-      passwordTimeout = $timeout( ->
-        loadPrivateKeyRing()
-      , 500)
+    $scope.unlockPrivateKeyring = ->
+      $mdToast.show $mdToast.simple().textContent("Password required.").hideDelay(3000) if $scope.password?.length < 1
+      loadPrivateKeyRing()
 
     $scope.bundleKeyring = ->
       if $scope.paillier.publicKeyRing.isLoaded() && $scope.paillier.privateKeyRing.isLoaded()
@@ -58,6 +55,7 @@ angular.module 'vault'
               fileData['pk_ring.pai'] = publicKeyRing
               $scope.paillier.loadPublicKeys fileData['pk_ring.pai']
               .then ->
+                $mdToast.show $mdToast.simple().textContent('Public keyring loaded').hideDelay(3000)
                 $scope.onPublicKeyring()
               .catch (e) ->
                 throw e

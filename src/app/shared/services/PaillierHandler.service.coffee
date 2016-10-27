@@ -1,5 +1,5 @@
 angular.module 'vault'
-.factory 'Paillier', (HashedPassword, AESKey, HexHandler) ->
+.factory 'PaillierHandler', (HashedPassword, AESKey, EncodingHelper, PublicKey, PrivateKey) ->
   'ngInject'
 
   class PrivateKeyRing
@@ -18,18 +18,20 @@ angular.module 'vault'
       this.hashedPassword.validate password
       this.aesKey = new AESKey aesKey
       this.aesKey.decrypt this.hashedPassword.get('hash')
-      this._iv = HexHandler.parseHex data.slice(0, 16)
-      this._enc_keyring = HexHandler.parseHex data.slice(16, data.length)
-      this.keys = JSON.parse(CryptoJS.AES.decrypt(
+      this._iv = EncodingHelper.bin2hex data.slice(0, 16)
+      this._enc_keyring = EncodingHelper.bin2hex data.slice(16, data.length)
+      keyring = JSON.parse(CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
           {ciphertext: this._enc_keyring}),
         CryptoJS.enc.Hex.parse(this.aesKey.get('key')),
         {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: this._iv})
       .toString(CryptoJS.enc.Utf8))
+      for uid, data of keyring
+        this.keys[uid] = new PrivateKey(data)
       this._loaded = true
 
     toByteArray: ->
-      HexHandler.toHex(this._iv.toString()).concat HexHandler.toHex(this._enc_keyring.toString())
+      EncodingHelper.hex2bin(this._iv.toString()).concat EncodingHelper.hex2bin(this._enc_keyring.toString())
 
   class PublicKeyRing
     this._loaded = false
@@ -41,12 +43,14 @@ angular.module 'vault'
     toString: ->
       JSON.stringify this.keys
 
-    load: (data) ->
-      this.keys = JSON.parse data
+    load: (json) ->
+      keyring = JSON.parse json
+      for uid, data of keyring
+        this.keys[uid] = new PublicKey(data)
       this._loaded = true
 
 
-  class Paillier
+  class PaillierHandler
     constructor: ->
       this.privateKeyRing = new PrivateKeyRing()
       this.publicKeyRing = new PublicKeyRing()
@@ -71,4 +75,4 @@ angular.module 'vault'
         catch e
           reject(e)
 
-  new Paillier()
+  new PaillierHandler()

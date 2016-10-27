@@ -1,18 +1,18 @@
 <div layout="row" layout-align="center center">
     <md-tabs md-dynamic-height md-border-bottom flex="50">
         <md-tab label="Keyring">
-            <md-content class="md-padding" layout="column" layout-align="center center">
+            <div class="md-padding" layout="column" layout-align="center center">
                 <h1>Load client keyring</h1>
                 <keyring-handler on-private-keyring="privateKeyringLoaded" on-public-keyring="publicKeyringLoaded" paillier="paillier"></keyring-handler>
-            </md-content>
+            </div>
         </md-tab>
         <md-tab label="Search">
-            <md-content class="md-padding" ng-include="'app/client/search.html'" layout="column" layout-align="center center">
-            </md-content>
+            <div class="md-padding" ng-include="'app/client/search.html'" layout="column" layout-align="center center">
+            </div>
         </md-tab>
         <md-tab label="Create">
-            <md-content class="md-padding" ng-include="'app/client/create.html'" layout="column" layout-align="center center">
-            </md-content>
+            <div class="md-padding" ng-include="'app/client/create.html'" layout="column" layout-align="center center">
+            </div>
         </md-tab>
     </md-tabs>
 </div>
