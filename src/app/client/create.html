@@ -1,5 +1,7 @@
 <h1>Insert new records</h1>
 <form ng-submit="test_phrase()">
-    <textarea ng-model="phrase"></textarea>
+    <md-input-container class="md-block">
+        <textarea ng-model="$parent.phrase" cols="50" rows="5" md-select-on-focus></textarea>
+    </md-input-container>
     <input type="submit">
 </form>
