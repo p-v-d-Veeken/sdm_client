@@ -29,9 +29,9 @@ angular.module 'vault'
 
     bin2string: (bin) ->
       str = ""
-
-      for i in [0...bin.length]
-        str += String.fromCharCode(parseInt(bin[i], 2));
+      buf = new Uint8Array bin
+      for i in [0...buf.length]
+        str += String.fromCharCode buf[i]
       str
 
   new EncodingHelper()
