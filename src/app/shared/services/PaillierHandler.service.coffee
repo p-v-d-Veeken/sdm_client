@@ -4,59 +4,59 @@ angular.module 'vault'
 
   class PrivateKeyRing
     constructor: ->
-      this._loaded = false
-      this._iv = ''
-      this._enc_keyring = ''
-      this.keys = {}
-      this.hashedPassword = null
-      this.aesKey = null
+      @_loaded = false
+      @_iv = ''
+      @_enc_keyring = ''
+      @keys = {}
+      @hashedPassword = null
+      @aesKey = null
 
     isLoaded: ->
-      this._loaded
+      @_loaded
 
     load: (password, hash, aesKey, data) ->
-      this.hashedPassword = new HashedPassword hash
-      this.hashedPassword.validate password
-      this.aesKey = new AESKey aesKey
-      this.aesKey.decrypt this.hashedPassword.get('hash')
-      this._iv = EncodingHelper.bin2hex data.slice(0, 16)
-      this._enc_keyring = EncodingHelper.bin2hex data.slice(16, data.length)
+      @hashedPassword = new HashedPassword hash
+      @hashedPassword.validate password
+      @aesKey = new AESKey aesKey
+      @aesKey.decrypt @hashedPassword.get('hash')
+      @_iv = EncodingHelper.bin2hex data.slice(0, 16)
+      @_enc_keyring = EncodingHelper.bin2hex data.slice(16, data.length)
       keyring = JSON.parse(CryptoJS.AES.decrypt(
         CryptoJS.lib.CipherParams.create(
-          {ciphertext: this._enc_keyring}),
-        CryptoJS.enc.Hex.parse(this.aesKey.get('key')),
-        {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: this._iv})
+          {ciphertext: @_enc_keyring}),
+        CryptoJS.enc.Hex.parse(@aesKey.get('key')),
+        {mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7, iv: @_iv})
       .toString(CryptoJS.enc.Utf8))
       for uid, data of keyring
-        this.keys[uid] = new PrivateKey(data)
-      this._loaded = true
+        @keys[uid] = new PrivateKey(data)
+      @_loaded = true
 
     toByteArray: ->
-      EncodingHelper.hex2bin(this._iv.toString()).concat EncodingHelper.hex2bin(this._enc_keyring.toString())
+      EncodingHelper.hex2bin(@_iv.toString()).concat EncodingHelper.hex2bin(@_enc_keyring.toString())
 
   class PublicKeyRing
 
     constructor: ->
-      this._loaded = false
-      this.keys = {}
+      @_loaded = false
+      @keys = {}
 
     isLoaded: ->
-      this._loaded
+      @_loaded
 
     toString: ->
-      JSON.stringify this.keys
+      JSON.stringify @keys
 
     load: (json) ->
       keyring = JSON.parse json
       for uid, data of keyring
-        this.keys[uid] = new PublicKey(data)
-      this._loaded = true
+        @keys[uid] = new PublicKey(data)
+      @_loaded = true
 
 
   class PaillierHandler
     constructor: ->
-      this.privateKeyRing = new PrivateKeyRing()
-      this.publicKeyRing = new PublicKeyRing()
+      @privateKeyRing = new PrivateKeyRing()
+      @publicKeyRing = new PublicKeyRing()
 
     loadPublicKeys: (data) ->
       $this = this
