@@ -9,15 +9,18 @@ angular.module 'vault'
       name: "Key"
       value: "KEY"
       equations: {
-        "Equal": "="
+        "=": "="
       }
     }
     "VALUE": {
       name: "Value"
       value: "VALUE"
       equations: {
-        "Smaller": "<"
-        "Greater or equal": ">="
+        "<": "<"
+        "≤": "<="
+        "=": "="
+        ">": ">"
+        "≥": ">="
       }
     }
   }
