@@ -27,7 +27,11 @@ angular.module 'vault'
         i++
       array
 
-    bin2string: (data) ->
-      # TODO
+    bin2string: (bin) ->
+      str = ""
+
+      for i in [0...bin.length]
+        str += String.fromCharCode(parseInt(bin[i], 2));
+      str
 
   new EncodingHelper()

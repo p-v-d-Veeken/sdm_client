@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ClientController', ($scope, PaillierHandler, EncodingHelper) ->
+.controller 'ClientController', ($scope, PaillierHandler, PrivateKey, EncodingHelper) ->
   'ngInject'
 
   $scope.paillier = PaillierHandler
@@ -49,11 +49,12 @@ angular.module 'vault'
     console.log($scope.phrase)
 
   $scope.privateKeyringLoaded = ->
-    console.log new BigInteger(EncodingHelper.string2bin(window.atob($scope.paillier.privateKeyRing.keys['0'].lambda))).toString()
+    sk = new PrivateKey($scope.paillier.privateKeyRing.keys['0'])
+    c = new BigInteger(EncodingHelper.string2bin($scope.phrase))
+    m = sk.decrypt(c)
+    console.log(EncodingHelper.bin2string(m))
 
   $scope.publicKeyringLoaded = ->
-
-
 
   $scope.phrase = ''
   $scope.test_phrase = ->
