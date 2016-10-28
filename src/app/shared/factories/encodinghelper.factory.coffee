@@ -23,7 +23,7 @@ angular.module 'vault'
       array = new Uint8Array(new ArrayBuffer(string.length))
       i = 0
       while i < string.length
-        array[i] = string.charCodeAt i
+        array[i] = string.charCodeAt i & 0xff
         i++
       array
 
