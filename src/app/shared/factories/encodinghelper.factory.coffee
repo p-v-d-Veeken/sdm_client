@@ -4,12 +4,9 @@ angular.module 'vault'
 
   class EncodingHelper
     bin2hex: (data) ->
-      hex = []
-      data.forEach((c) ->
-        hex.push((c >>> 4).toString(16))
-        hex.push((c & 0xF).toString(16))
-      )
-      CryptoJS.enc.Hex.parse(hex.join(""))
+      hex = ""
+      hex += ('0' + (byte & 0xFF).toString(16)).slice(-2) for byte in data
+      hex
 
     hex2bin: (data) ->
       bytes = []
