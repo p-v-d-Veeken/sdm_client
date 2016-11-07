@@ -9,7 +9,8 @@ angular.module 'vault'
       name: "Key"
       value: "KEY"
       equations: {
-        "=": "="
+        "∈": "in",
+        "=": "=",
       }
     }
     "VALUE": {
