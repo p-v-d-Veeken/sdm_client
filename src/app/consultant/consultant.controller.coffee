@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ConsultantController', ($scope, VaultApi, Paillier, PaillierHandler, PrivateKey, $timeout) ->
+.controller 'ConsultantController', ($scope, $http, VaultApi, Paillier, PaillierHandler, PrivateKey, $timeout) ->
   'ngInject'
 
   $scope.types = {
@@ -48,6 +48,15 @@ angular.module 'vault'
   $scope.clients = [
     {name:"Harry"}
   ]
+
+  $http.get("vault.maketek.nl/api/clients")
+  .success((data) ->
+      clients = data
+      console.log('success')
+      return
+    ).error (data) ->
+      console.log('failed')
+      return
 
   loadPrivateKeyRing = ->
     if $scope.data.aesKey? && $scope.data.privateKeyRing? && $scope.data.hash? && $scope.password.length > 0
