@@ -1,0 +1,32 @@
+<h1>Add client</h1>
+<form >
+  <div layout="row">
+      <md-input-container>
+          <label>Client name</label>
+          <textarea ng-model="add.name" cols="50" rows="1" md-select-on-focus></textarea>
+      </md-input-container>
+  </div>
+
+  <button type="submit" md-button class="md-raised md-primary" ng-click="addClient()">Add</button>
+</form>
+
+<md-table-container>
+    <table md-table>
+        <thead md-head>
+        <tr md-row>
+            <th md-column>Name</th>
+            <th md-column>Keyring</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row ng-repeat="client in clients">
+            <td md-cell>{{client.name}}</td>
+            <td md-cell>
+                <md-button class="md-raised md-primary" aria-label="More" ng-click="generateKeyring($index)">
+                    Generate
+                </md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</md-table-container>

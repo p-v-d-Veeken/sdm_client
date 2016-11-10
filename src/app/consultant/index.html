@@ -1,14 +1,19 @@
-<h1>Consultant</h1>
-
-<md-input-container>
-    <label>Password</label>
-    <input ng-model="password" ng-change="passwordChanged()">
-</md-input-container>
-<lf-ng-md-file-input lf-files='file.publicKeyRing' lf-placeholder="Public Keyring"> </lf-ng-md-file-input>
-<lf-ng-md-file-input lf-files='file.privateKeyRing' lf-placeholder="Private Keyring"> </lf-ng-md-file-input>
-<lf-ng-md-file-input lf-files='file.aesKey' lf-placeholder="AES key"> </lf-ng-md-file-input>
-<lf-ng-md-file-input lf-files='file.hash' lf-placeholder="Password Hash"> </lf-ng-md-file-input>
-<lf-ng-md-file-input lf-files='file.encrypted' lf-placeholder="Encrypted file"> </lf-ng-md-file-input>
-<br>
-<md-button class="md-raised md-primary">Decrypt</md-button>
+<div layout="row" layout-align="center center">
+  <md-tabs md-dynamic-height md-border-bottom flex="50">
+    <md-tab label="Keyring">
+      <div class="md-padding" layout="column" layout-align="center center">
+          <h1>Load consultant keyring</h1>
+          <keyring-handler on-private-keyring="privateKeyringLoaded" on-public-keyring="publicKeyringLoaded" paillier="paillier"></keyring-handler>
+      </div>
+    </md-tab>
+    <md-tab label="Search" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/search.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+    <md-tab label="AddClient" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/addClient.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+  </md-tabs>
+</div>
 <div>{{decrypted}}</div>
