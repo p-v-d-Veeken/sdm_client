@@ -27,6 +27,7 @@ angular.module 'vault'
     set: false
   }
 
+  $scope.add = {}
 
   nop = ->
 
@@ -40,7 +41,8 @@ angular.module 'vault'
   $scope.publicKeyringLoaded = ->
 
   $scope.addClient = ->
-    $scope.clients.push($scope.add)
+    $scope.clients.push(angular.copy($scope.add))
+    $scope.add = {}
     console.log("client added")
 
   $scope.clients = [
