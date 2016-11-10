@@ -4,9 +4,10 @@ info:
   title: Searchable Encrypted Database
   description: |
     The API for accessing a searchable encrpyted database. This is part of a project for the Secure Data Management course.
-host: 'api.vault.maketek.nl'
+host: 'vault.maketek.nl'
+basePath: '/api'
 schemes:
-  - https
+  - http
 produces:
   - application/json
 paths:
