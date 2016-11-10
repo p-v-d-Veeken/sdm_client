@@ -49,15 +49,6 @@ angular.module 'vault'
     {name:"Harry"}
   ]
 
-  $http.get("/clients")
-  .success((data) ->
-      clients = data
-      console.log('success')
-      return
-    ).error (data) ->
-      console.log('failed')
-      return
-
   loadPrivateKeyRing = ->
     if $scope.data.aesKey? && $scope.data.privateKeyRing? && $scope.data.hash? && $scope.password.length > 0
       $scope.paillier.loadPrivateKeys $scope.password, $scope.data.hash, $scope.data.aesKey, $scope.data.privateKeyRing
