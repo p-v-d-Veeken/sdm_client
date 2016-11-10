@@ -3,8 +3,8 @@ info:
   version: "1.0.1"
   title: Searchable Encrypted Database
   description: |
-    The API for accessing a searchable encrpyted database/ This is part of a project for the Secure Data Management course.
-
+    The API for accessing a searchable encrpyted database. This is part of a project for the Secure Data Management course.
+host: 'api.vault.maketek.nl'
 schemes:
   - https
 produces:
@@ -356,7 +356,7 @@ definitions:
     properties:
       column:
         type: string
-        description: The clumn you want to filter on
+        description: The column you want to filter on
         enum: ['KEY', 'VALUE']
       value:
         type: string
@@ -364,7 +364,7 @@ definitions:
       operator:
         type: string
         description: The operation to use for comparison
-        enum: ['<', '>=', '=']
+        enum: ['<', '<=', '=', '>=', '>', 'in']
   ApiClient:
     type: object
     required:
