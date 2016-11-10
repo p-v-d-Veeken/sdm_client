@@ -49,7 +49,7 @@ angular.module 'vault'
     {name:"Harry"}
   ]
 
-  $http.get("vault.maketek.nl/api/clients")
+  $http.get("/clients")
   .success((data) ->
       clients = data
       console.log('success')
