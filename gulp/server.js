@@ -36,7 +36,7 @@ function browserSyncInit(baseDir, browser) {
    */
   server.middleware = [];
   //TODO daadwerkelijke server locatie aangeven (vermijden we CORS problemen)
-  server.middleware.push(proxyMiddleware('/api', {target: 'http://localhost:8080', changeOrigin: true}));
+  server.middleware.push(proxyMiddleware('/api', {target: 'http://api.vault.maketek.nl', changeOrigin: true}));
 
   browserSync.instance = browserSync.init({
     startPath: '/',
