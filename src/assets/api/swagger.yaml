@@ -3,8 +3,9 @@ info:
   version: "1.0.1"
   title: Searchable Encrypted Database
   description: |
-    The API for accessing a searchable encrpyted database. This is part of a project for the Secure Data Management course.
+    The API for accessing a searchable encrpyted database/ This is part of a project for the Secure Data Management course.
 host: 'api.vault.maketek.nl'
+basePath: '/api'
 schemes:
   - https
 produces:
@@ -213,11 +214,28 @@ paths:
       consumes:
         - application/zip
       parameters:
-        - name: keyring
+        - name: keyringData
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Keyring'
+            type: object
+            required:
+              - keyring
+              - answer1
+              - answer2
+              - answer3
+            properties:
+              keyring:
+                $ref: '#/definitions/Keyring'
+              answer1:
+                type: string
+                description: The first security answer
+              answer2:
+                type: string
+                description: The second security answer
+              answer3:
+                type: string
+                description: The third security answer
       responses:
         200:
           description: Successful response
@@ -356,7 +374,7 @@ definitions:
     properties:
       column:
         type: string
-        description: The column you want to filter on
+        description: The clumn you want to filter on
         enum: ['KEY', 'VALUE']
       value:
         type: string
@@ -364,7 +382,7 @@ definitions:
       operator:
         type: string
         description: The operation to use for comparison
-        enum: ['<', '<=', '=', '>=', '>', 'in']
+        enum: ['<', '>=', '=']
   ApiClient:
     type: object
     required:
