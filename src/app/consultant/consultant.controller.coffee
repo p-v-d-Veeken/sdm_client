@@ -1,27 +1,54 @@
 angular.module 'vault'
-.controller 'ConsultantController', ($scope, VaultApi, Paillier, $timeout) ->
+.controller 'ConsultantController', ($scope, $http, VaultApi, Paillier, PaillierHandler, PrivateKey, $timeout) ->
   'ngInject'
 
-  $scope.decrypted = ''
-  $scope.paillier = Paillier
-  $scope.password = ''
-  $scope.data = {
-    publicKeyRing: null,
-    privateKeyRing: null,
-    aesKey: null,
-    encrypted: null,
-    hash: null
+  $scope.types = {
+    "KEY": {
+      name: "Key"
+      value: "KEY"
+      equations: {
+        "∈": "in",
+        "=": "=",
+      }
+    }
+    "VALUE": {
+      name: "Value"
+      value: "VALUE"
+      equations: {
+        "<": "<"
+        "≤": "<="
+        "=": "="
+        ">": ">"
+        "≥": ">="
+      }
+    }
   }
-  $scope.file = {
-    publicKeyRing: [],
-    privateKeyRing: [],
-    aesKey: [],
-    encrypted: [],
-    hash: []
+  $scope.search = {
+    set: false
   }
 
+  $scope.add = {}
+
   nop = ->
-  
+
+  $scope.paillier = PaillierHandler
+
+  $scope.generateKeyring = (index) ->
+    console.log("generating keyring")
+
+  $scope.privateKeyringLoaded = ->
+
+  $scope.publicKeyringLoaded = ->
+
+  $scope.addClient = ->
+    $scope.clients.push(angular.copy($scope.add))
+    $scope.add = {}
+    console.log("client added")
+
+  $scope.clients = [
+    {name:"Harry"}
+  ]
+
   loadPrivateKeyRing = ->
     if $scope.data.aesKey? && $scope.data.privateKeyRing? && $scope.data.hash? && $scope.password.length > 0
       $scope.paillier.loadPrivateKeys $scope.password, $scope.data.hash, $scope.data.aesKey, $scope.data.privateKeyRing
@@ -35,46 +62,46 @@ angular.module 'vault'
     passwordTimeout = $timeout( ->
       loadPrivateKeyRing()
     , 500)
-  
-  $scope.$watchCollection 'file.publicKeyRing', ->
-    if $scope.file.publicKeyRing[0]?
-      load $scope.file.publicKeyRing[0], 'publicKeyRing', false
-        .then ->
-          $scope.paillier.loadPublicKeys $scope.data.publicKeyRing
-        .catch ->
-          console.log "oops, publicKeyRing loading failed"
 
-  $scope.$watchCollection 'file.privateKeyRing', ->
-    if $scope.file.privateKeyRing[0]?
-      load $scope.file.privateKeyRing[0], 'privateKeyRing', true
-        .then ->
-          loadPrivateKeyRing()
-        .catch ->
-          console.log "oops, privateKeyRing loading failed"
-
-  $scope.$watchCollection 'file.aesKey', ->
-    if $scope.file.aesKey[0]?
-      load $scope.file.aesKey[0], 'aesKey', true
-        .then ->
-          loadPrivateKeyRing()
-        .catch ->
-          console.log "oops, aesKey loading failed"
-
-  $scope.$watchCollection 'file.hash', ->
-    if $scope.file.hash[0]?
-      load $scope.file.hash[0], 'hash', false
-      .then ->
-        loadPrivateKeyRing()
-      .catch ->
-        console.log "oops, hash loading failed"
-
-  $scope.$watchCollection 'file.encrypted', ->
-    if $scope.file.encrypted[0]?
-      load $scope.file.encrypted[0], 'encrypted', true
-        .then ->
-          nop()
-        .catch ->
-          console.log "oops, encrypted file loading failed"
+  # $scope.$watchCollection 'file.publicKeyRing', ->
+  #   if $scope.file.publicKeyRing[0]?
+  #     load $scope.file.publicKeyRing[0], 'publicKeyRing', false
+  #       .then ->
+  #         $scope.paillier.loadPublicKeys $scope.data.publicKeyRing
+  #       .catch ->
+  #         console.log "oops, publicKeyRing loading failed"
+  #
+  # $scope.$watchCollection 'file.privateKeyRing', ->
+  #   if $scope.file.privateKeyRing[0]?
+  #     load $scope.file.privateKeyRing[0], 'privateKeyRing', true
+  #       .then ->
+  #         loadPrivateKeyRing()
+  #       .catch ->
+  #         console.log "oops, privateKeyRing loading failed"
+  #
+  # $scope.$watchCollection 'file.aesKey', ->
+  #   if $scope.file.aesKey[0]?
+  #     load $scope.file.aesKey[0], 'aesKey', true
+  #       .then ->
+  #         loadPrivateKeyRing()
+  #       .catch ->
+  #         console.log "oops, aesKey loading failed"
+  #
+  # $scope.$watchCollection 'file.hash', ->
+  #   if $scope.file.hash[0]?
+  #     load $scope.file.hash[0], 'hash', false
+  #     .then ->
+  #       loadPrivateKeyRing()
+  #     .catch ->
+  #       console.log "oops, hash loading failed"
+  #
+  # $scope.$watchCollection 'file.encrypted', ->
+  #   if $scope.file.encrypted[0]?
+  #     load $scope.file.encrypted[0], 'encrypted', true
+  #       .then ->
+  #         nop()
+  #       .catch ->
+  #         console.log "oops, encrypted file loading failed"
 
   load = (file, destination, asHex) ->
     new Promise((resolve, reject) ->
