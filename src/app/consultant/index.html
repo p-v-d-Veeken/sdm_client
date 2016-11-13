@@ -10,8 +10,12 @@
       <div class="md-padding" ng-include="'app/consultant/search.html'" layout="column" layout-align="center center">
       </div>
     </md-tab>
-    <md-tab label="AddClient" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+    <md-tab label="Add Client" ng-disabled="!paillier.privateKeyRing.isLoaded()">
       <div class="md-padding" ng-include="'app/consultant/addClient.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+    <md-tab label="Add Record" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/addRecord.html'" layout="column" layout-align="center center">
       </div>
     </md-tab>
   </md-tabs>

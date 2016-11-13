@@ -33,9 +33,6 @@ angular.module 'vault'
 
   $scope.constraints = []
 
-
-  console.log(VaultApi.getClients({'keyring':$scope.paillier.publicKeyRing.toString()}))
-
   $scope.updateQuery = ->
     $scope.search.set = $scope.search.type? && $scope.search.type.length > 0
     $scope.equations = $scope.types[$scope.search.type].equations if $scope.types[$scope.search.type]?
