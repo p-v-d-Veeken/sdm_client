@@ -2,5 +2,8 @@ angular.module 'vault'
   .factory 'VaultApi', (VaultApiFunc, apiEndpoint) ->
     'ngInject'
 
-    endpoint = apiEndpoint if apiEndpoint? else undefined
+    if apiEndpoint?
+      endpoint = apiEndpoint
+    else
+      endpoint = undefined
     return new VaultApiFunc endpoint

@@ -6,7 +6,7 @@ angular.module 'vault'
     bin2hex: (data) ->
       hex = ""
       hex += ('0' + (byte & 0xFF).toString(16)).slice(-2) for byte in data
-      hex
+      CryptoJS.enc.Hex.parse hex
 
     hex2bin: (data) ->
       bytes = []
