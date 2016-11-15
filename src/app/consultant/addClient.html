@@ -2,8 +2,20 @@
 <form >
   <div layout="row">
       <md-input-container>
-          <label>Client name</label>
-          <input ng-model="add.name" md-select-on-focus>
+          <label>First name</label>
+          <input ng-model="add.fname" md-select-on-focus>
+      </md-input-container>
+  </div>
+  <div layout="row">
+      <md-input-container>
+          <label>Last name</label>
+          <input ng-model="add.lname">
+      </md-input-container>
+  </div>
+  <div layout="row">
+      <md-input-container>
+          <label>email</label>
+          <input ng-model="add.email">
       </md-input-container>
   </div>
 
@@ -15,12 +27,14 @@
         <thead md-head>
         <tr md-row>
             <th md-column>Name</th>
+            <th md-column>Email</th>
             <th md-column>Keyring</th>
         </tr>
         </thead>
         <tbody md-body>
         <tr md-row ng-repeat="client in clients">
-            <td md-cell>{{client.name}}</td>
+            <td md-cell>{{client.fname}} {{client.lname}}</td>
+            <td md-cell>{{client.email}}</td>
             <td md-cell>
                 <md-button class="md-raised md-primary" aria-label="More" ng-click="generateKeyring($index)">
                     Generate

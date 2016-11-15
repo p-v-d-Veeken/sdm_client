@@ -27,9 +27,27 @@ angular.module 'vault'
     set: false
   }
 
+  $scope.updateQuery = ->
+    $scope.search.set = $scope.search.column? && $scope.search.column.length > 0
+    $scope.equations = $scope.types[$scope.search.column].equations if $scope.types[$scope.search.column]?
+
+  $scope.constraints = []
+
+  $scope.addItem = ->
+    if $scope.search.column? && $scope.search.operator? && $scope.search.value?
+      $scope.constraints.push(angular.copy($scope.search))
+      $scope.search = {}
+
+  $scope.deleteConstraint = (index) ->
+    $scope.constraints = $scope.constraints.splice index, 1
+    $scope.constraints = [] if $scope.constraints.length < 2
+
   $scope.add = {}
 
   nop = ->
+
+
+  $scope.clients = []
 
   $scope.paillier = PaillierHandler
 
@@ -37,17 +55,23 @@ angular.module 'vault'
     console.log("generating keyring")
 
   $scope.privateKeyringLoaded = ->
+    $scope.clients = VaultApi.getClients({'keyring':$scope.paillier.publicKeyRing.toString()})
 
   $scope.publicKeyringLoaded = ->
 
+  $scope.searchDB = ->
+    VaultApi.getClientsByClientIdRecords({'clientId':$scope.clientID,'data':$scope.constraints})
+
   $scope.addClient = ->
     $scope.clients.push(angular.copy($scope.add))
+    VaultApi.postClients({'data':{'client':$scope.add,'keyring':$scope.paillier.publicKeyRing.toString()}})
     $scope.add = {}
     console.log("client added")
 
-  $scope.clients = [
-    {name:"Harry"}
-  ]
+  $scope.addRecord = ->
+    VaultApi.postClientsByClientIdRecords({'clientId':$scope.clientId, 'data':$scope.record})
+    $scope.record = {}
+
 
   loadPrivateKeyRing = ->
     if $scope.data.aesKey? && $scope.data.privateKeyRing? && $scope.data.hash? && $scope.password.length > 0

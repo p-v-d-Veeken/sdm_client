@@ -1,9 +1,14 @@
 <h1>Search for records</h1>
-<form ng-submit="addItem()">
+<md-input-container>
+    <label>Client ID</label>
+    <input ng-model="clientID">
+</md-input-container>
+<button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
+<form>
     <div layout="row">
         <md-input-container>
             <label>Type</label>
-            <md-select ng-model="search.type" ng-change="updateQuery()">
+            <md-select ng-model="search.column" ng-change="updateQuery()">
                 <md-option md-option-empty value="">Select</md-option>
                 <md-option ng-repeat="(_, type) in types" value="{{type.value}}">
                     {{type.name}}
@@ -13,7 +18,7 @@
 
         <md-input-container>
             <label>Compare</label>
-            <md-select ng-model="search.equation" ng-disabled="search.set == false">
+            <md-select ng-model="search.operator" ng-disabled="search.set == false">
                 <md-option md-option-empty value="">Select</md-option>
                 <md-option ng-repeat="(name, value) in equations" value="{{value}}">
                     {{name}}
@@ -23,7 +28,7 @@
 
         <md-input-container>
             <label>Compare to</label>
-            <input ng-model="search.compare">
+            <input ng-model="search.value">
         </md-input-container>
     </div>
 
@@ -42,9 +47,9 @@
         </thead>
         <tbody md-body>
         <tr md-row ng-repeat="constraint in constraints">
-            <td md-cell>{{constraint.type}}</td>
-            <td md-cell>{{constraint.equation}}</td>
-            <td md-cell>{{constraint.compare}}</td>
+            <td md-cell>{{constraint.column}}</td>
+            <td md-cell>{{constraint.operator}}</td>
+            <td md-cell>{{constraint.value}}</td>
             <td md-cell>
                 <md-button class="md-icon-button" aria-label="More" ng-click="deleteConstraint($index)">
                     <i class="fa fa-times" aria-hidden="true"></i>

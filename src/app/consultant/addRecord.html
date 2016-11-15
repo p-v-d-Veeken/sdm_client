@@ -1,0 +1,21 @@
+<h1>Add records</h1>
+<form>
+    <div layout="row">
+        <md-input-container>
+                <label>Client id</label>
+                <input ng-model="clientId">
+        </md-input-container>
+
+        <md-input-container>
+            <label>Name</label>
+            <input ng-model="record.name">
+        </md-input-container>
+
+        <md-input-container>
+            <label>Value</label>
+            <input ng-model="record.value">
+        </md-input-container>
+    </div>
+
+    <button type="submit" md-button class="md-raised md-primary" ng-click="addRecord()">Add</button>
+</form>
