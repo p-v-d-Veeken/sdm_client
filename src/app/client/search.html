@@ -28,9 +28,11 @@
     </div>
 
     <button type="submit" md-button class="md-raised md-primary" ng-click="addItem()">Add</button>
+    <md-button class="md-raised md-secondary" ng-click="executeSearch()">Search</md-button>
 </form>
 
 <md-table-container>
+    <md-subheader class="md-primary">Constraints</md-subheader>
     <table md-table>
         <thead md-head>
         <tr md-row>
@@ -50,6 +52,25 @@
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </md-button>
             </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <md-subheader class="md-primary">Results</md-subheader>
+    <table md-table>
+        <thead md-head>
+        <tr md-row>
+            <th md-column>ID</th>
+            <th md-column>Key</th>
+            <th md-column>Value</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row ng-repeat="result in results">
+            <td md-cell>{{result.id}}</td>
+            <td md-cell>{{result.key}}</td>
+            <td md-cell>{{result.value}}</td>
         </tr>
         </tbody>
     </table>

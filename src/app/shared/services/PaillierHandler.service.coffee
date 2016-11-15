@@ -30,6 +30,9 @@ angular.module 'vault'
       for uid, data of keyring
         @keys[uid] = new PrivateKey(data)
       @_loaded = true
+      
+    toString: ->
+      JSON.stringify @keys
 
     toByteArray: ->
       EncodingHelper.hex2bin(@_iv.toString()).concat EncodingHelper.hex2bin(@_enc_keyring.toString())

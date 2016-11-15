@@ -11,9 +11,8 @@
     </div>
     <md-input-container>
         <label>Password</label>
-        <input ng-model="password" type="password">
+        <input ng-model="password" type="password" ng-disabled="!_loaded">
     </md-input-container>
-    <md-button class="md-primary md-raised" ng-click="unlockPrivateKeyring()">Unlock</md-button>
-    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" >
+    <button type="submit" md-button class="md-raised md-primary" ng-click="unlockPrivateKeyring()" ng-disabled="!_loaded">Unlock</button>
 </form>
-<md-button class="md-primary md-raised" ng-click="bundleKeyring()">Bundle and download</md-button>
+<md-button class="md-primary md-raised" ng-click="bundleKeyring()" ng-disabled="!unlocked()">Bundle and download</md-button>

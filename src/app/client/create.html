@@ -1,7 +1,13 @@
 <h1>Insert new records</h1>
-<form ng-submit="test_phrase()">
+<form ng-submit="createRecord()" layout-padding>
     <md-input-container class="md-block">
-        <textarea ng-model="$parent.phrase" cols="50" rows="5" md-select-on-focus></textarea>
+        <label>Record key</label>
+        <input ng-model="$parent.newRecord.key" required />
     </md-input-container>
-    <input type="submit">
+    <md-input-container class="md-block">
+        <label>Record value</label>
+        <input ng-model="$parent.newRecord.value" type="number" required />
+    </md-input-container>
+    <md-button class="md-primary md-raised" ng-click="createRecord()">create</md-button>
+    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" >
 </form>

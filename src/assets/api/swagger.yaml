@@ -3,25 +3,24 @@ info:
   version: "1.0.1"
   title: Searchable Encrypted Database
   description: |
-    The API for accessing a searchable encrpyted database/ This is part of a project for the Secure Data Management course.
+    The API for accessing a searchable encrpyted database. This is part of a project for the Secure Data Management course.
 host: 'api.vault.maketek.nl'
-basePath: '/api'
 schemes:
   - https
 produces:
   - application/json
 paths:
-  /clients:
-    get:
+  /clients/get:
+    post:
       description: |
         Retrieves an array of all 'Client' entities.
         Only permitted by the consultant
       parameters:
-        - name: keyring
+        - name: keyringData
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Keyring'
+            $ref: '#/definitions/KeyringData'
       responses:
         200:
           description: Successful response
@@ -31,6 +30,7 @@ paths:
               $ref: "#/definitions/ApiClient"
         400:
           description: Something went wrong
+  /clients/post:
     post:
       description: |
         Creates a new 'Client' enitity
@@ -47,8 +47,8 @@ paths:
             $ref: "#/definitions/ClientBundle"
         400:
           description: Something went wrong
-  /clients/{clientId}:
-    get:
+  /clients/{clientId}/get:
+    post:
       description: |
         Retrieves a  'Client' entity.
         Only permitted by the consultant or the client itself
@@ -58,11 +58,11 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: keyring
+        - name: keyringData
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Keyring'
+            $ref: '#/definitions/KeyringData'
       responses:
         200:
           description: Successful response
@@ -70,7 +70,8 @@ paths:
             $ref: "#/definitions/ApiClient"
         400:
           description: Something went wrong
-    put:
+  /clients/{clientId}/put:
+    post:
       description: |
         Updates a  'Client' entity.
         Only permitted by the consultant or the client itself
@@ -90,7 +91,8 @@ paths:
           description: Successful response
         400:
           description: Something went wrong
-    delete:
+  /clients/{clientId}/delete:
+    post:
       description: |
         Deletes a  'Client' entity.
         Only permitted by the consultant or the client itself
@@ -100,18 +102,18 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: keyring
+        - name: keyringData
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Keyring'
+            $ref: '#/definitions/KeyringData'
       responses:
         200:
           description: Successful response
         400:
           description: Something went wrong
-  /clients/{clientId}/records:
-    get:
+  /clients/{clientId}/records/get:
+    post:
       description: |
         Retrieves an array of all 'Record' entities owned by the client indicated with the clientId.
         Only permitted by the consultant
@@ -135,6 +137,7 @@ paths:
               $ref: "#/definitions/ApiRecord"
         400:
           description: Something went wrong
+  /clients/{clientId}/records/post:
     post:
       description: |
         Creates a new 'Record' enitity for the owning client
@@ -156,8 +159,8 @@ paths:
             $ref: "#/definitions/ApiRecord"
         400:
           description: Something went wrong
-  /clients/{clientId}/records/{recordId}:
-    put:
+  /clients/{clientId}/records/{recordId}/put:
+    post:
       description: |
         Updates a  'Record' entity owned by the client.
         Only permitted by the consultant or the client itself
@@ -182,7 +185,8 @@ paths:
           description: Successful response
         400:
           description: Something went wrong
-    delete:
+  /clients/{clientId}/records/{recordId}/delete:
+    post:
       description: |
         Deletes a  'Record' entity owned by the client.
         Only permitted by the consultant or the client itself
@@ -197,17 +201,17 @@ paths:
           type: integer
           required: true
           description: The ID of the client
-        - name: keyring
+        - name: keyringData
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Keyring'
+            $ref: '#/definitions/KeyringData'
       responses:
         200:
           description: Successful response
         400:
           description: Something went wrong
-  /keyring:
+  /keyring/post:
     post:
       description: |
         Call master keyring will be encrypted and stored on the server
@@ -218,31 +222,14 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            required:
-              - keyring
-              - answer1
-              - answer2
-              - answer3
-            properties:
-              keyring:
-                $ref: '#/definitions/Keyring'
-              answer1:
-                type: string
-                description: The first security answer
-              answer2:
-                type: string
-                description: The second security answer
-              answer3:
-                type: string
-                description: The third security answer
+            $ref: '#/definitions/KeyringData'
       responses:
         200:
           description: Successful response
         400:
           description: Something went wrong
-  /keyring/retrieve/1:
-    get:
+  /keyring/retrieve/1/get:
+    post:
       description: |
         Call the master keyring retrieval method (step 1)
       parameters:
@@ -258,8 +245,8 @@ paths:
             $ref: "#/definitions/ApiRetrievalResponse"
         400:
           description: Something went wrong
-  /keyring/retrieve/2:
-    get:
+  /keyring/retrieve/2/get:
+    post:
       description: |
         Call the master keyring retrieval method (step 2)
       parameters:
@@ -275,8 +262,8 @@ paths:
             $ref: "#/definitions/ApiRetrievalAnswer"
         400:
           description: Something went wrong
-  /keyring/retrieve/3:
-    get:
+  /keyring/retrieve/3/get:
+    post:
       description: |
         Call the master keyring retrieval method (step 3)
       produces:
@@ -296,7 +283,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: '#/definitions/Keyring'
+            $ref: '#/definitions/KeyringData'
         400:
           description: Something went wrong
 
@@ -305,35 +292,35 @@ definitions:
     type: object
     required:
       - query
-      - keyring
+      - keyringData
     properties:
       query:
         type: array
         items:
           $ref: "#/definitions/Query"
-      keyring:
-        $ref: '#/definitions/Keyring'
+      keyringData:
+        $ref: '#/definitions/KeyringData'
   ClientBundle:
     type: object
     required:
-      - keyring
+      - keyringData
       - client
     properties:
       client:
         $ref: '#/definitions/ApiClient'
-      keyring:
-        $ref: '#/definitions/Keyring'
+      keyringData:
+        $ref: '#/definitions/KeyringData'
   RecordBundle:
     type: object
     required:
-      - keyring
+      - keyringData
       - record
     properties:
       record:
         $ref: '#/definitions/ApiRecord'
-      keyring:
-        $ref: '#/definitions/Keyring'
-  Keyring:
+      keyringData:
+        $ref: '#/definitions/KeyringData'
+  KeyringData:
     type: object
     required:
       - keyring
@@ -374,7 +361,7 @@ definitions:
     properties:
       column:
         type: string
-        description: The clumn you want to filter on
+        description: The column you want to filter on
         enum: ['KEY', 'VALUE']
       value:
         type: string
@@ -382,7 +369,7 @@ definitions:
       operator:
         type: string
         description: The operation to use for comparison
-        enum: ['<', '>=', '=']
+        enum: ['<', '<=', '=', '>=', '>', 'in']
   ApiClient:
     type: object
     required:
@@ -411,15 +398,15 @@ definitions:
   ApiRecord:
     type: object
     required:
-      - name
+      - key
       - value
     properties:
       id:
         type: integer
-        description: The id of the client
-      name:
+        description: The id of the record
+      key:
         type: string
-        description: The name of the record
+        description: The key(s) of the record
       value:
         type: string
         description: The value of the record
