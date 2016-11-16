@@ -39,8 +39,8 @@ angular.module 'vault'
       sk = {}
       sk.kty = "DAJ"
       sk.key_ops = ["decrypt"]
-      sk.pub = pub.serialize
-      sk.lamda = window.btoa(@_lambda.toString())
+      sk.pub = pub.serialize()
+      sk.lamda = btoa @_lambda.toString()
 
       sk
 

@@ -36,4 +36,12 @@ angular.module 'vault'
     rawObfuscate: (m) ->
       BigIntegerUtil.modPow(BigIntegerUtil.randomBigInt(@n, @bits), @n, @nSquare).multiply(m).mod(@nSquare)
 
+    serialize: ->
+      {
+        'alg': 'PAI-GN1'
+        'kty': 'DAj'
+        'n': btoa @n.toString(10)
+        'key_ops': ['encrypt']
+      }
+
   PublicKey
