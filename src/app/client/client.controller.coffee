@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ClientController', ($scope, VaultApi, PaillierHandler) ->
+.controller 'ClientController', ($scope, VaultApi, PaillierHandler, EncodingHelper) ->
   'ngInject'
 
   $scope.paillier = PaillierHandler

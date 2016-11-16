@@ -3,7 +3,7 @@
     <div layout="row">
         <md-input-container>
             <label>Client id</label>
-            <md-select ng-model="client.id" ng-change="updateQuery()">
+            <md-select ng-model="$parent.client.id" ng-change="updateQuery()">
                 <md-option md-option-empty value="">Select</md-option>
                 <md-option ng-repeat="(_, client) in clients" value="{{client.id}}">
                     ({{client.id}}) {{client.fname}} {{client.lname}}
@@ -13,12 +13,12 @@
 
         <md-input-container>
             <label>Name</label>
-            <input ng-model="record.name">
+            <input ng-model="$parent.record.key">
         </md-input-container>
 
         <md-input-container>
             <label>Value</label>
-            <input ng-model="record.value">
+            <input ng-model="$parent.record.value">
         </md-input-container>
     </div>
 
