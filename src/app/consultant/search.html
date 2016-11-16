@@ -38,6 +38,7 @@
 </form>
 
 <md-table-container>
+    <md-subheader class="md-primary">Constraints</md-subheader>
     <table md-table>
         <thead md-head>
         <tr md-row>
@@ -57,6 +58,31 @@
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </md-button>
             </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <md-subheader class="md-primary">Results</md-subheader>
+    <table md-table>
+        <thead md-head>
+        <tr md-row>
+            <th md-column>ID</th>
+            <th md-column>Key</th>
+            <th md-column>Value</th>
+            <td md-column>delete</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row ng-repeat="result in results">
+            <td md-cell>{{result.id}}</td>
+            <td md-cell>{{result.key}}</td>
+            <td md-cell>{{result.value}}</td>
+            <td md-cell>
+              <md-button class="md-icon-button" aria-label="More" ng-click="deleteRecord(result.id)">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </md-button>
+          </td>
         </tr>
         </tbody>
     </table>

@@ -54,7 +54,12 @@ angular.module 'vault'
     console.log("generating keyring")
 
   $scope.privateKeyringLoaded = ->
-    $scope.clients = VaultApi.postClientsGet({'keyringData':$scope.paillier.publicKeyRing.toString()})
+    VaultApi.postClientsGet({'keyringData':$scope.paillier.publicKeyRing.toString()})
+     .then( (data) ->
+       this.$scope.clients = data
+     , (error) ->
+       console.log error
+     )
 
   $scope.publicKeyringLoaded = ->
 
@@ -71,7 +76,20 @@ angular.module 'vault'
 
   $scope.addRecord = ->
     VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.client.id, 'data':$scope.record})
+    .then ( (data) ->
+      console.log("success")
+    , (error) ->
+      console.log error
+    )
     $scope.record = {}
+
+  $scope.deleteRecord = (index) ->
+    VaultApi.postClientsByClientIdRecordsByRecordIdDelete({'clientId':$scope.client.id, 'recordId':index})
+      .then( (data) ->
+        this.$scope.records = data
+      , (error) ->
+        console.log error
+      )
 
 
   loadPrivateKeyRing = ->
