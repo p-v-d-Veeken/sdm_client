@@ -17,6 +17,9 @@ angular.module 'vault'
       bytes
 
     string2bin: (string) ->
+      if(!isNaN(parseFloat(string)) && isFinite(string))
+        return new BigInteger("" + string).toByteArray()
+
       array = new Uint8Array(new ArrayBuffer(string.length))
       i = 0
       while i < string.length

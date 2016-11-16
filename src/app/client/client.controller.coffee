@@ -88,9 +88,13 @@ angular.module 'vault'
       'data': {
         'record': {
           'key': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.newRecord.key).toByteArray()))
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
+              new BigInteger(EncodingHelper.string2bin($scope.newRecord.key))
+            ).toByteArray()))
           'value': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.newRecord.value).toByteArray()))
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
+              new BigInteger(EncodingHelper.string2bin($scope.newRecord.value))
+            ).toByteArray()))
         }
         'keyring': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification

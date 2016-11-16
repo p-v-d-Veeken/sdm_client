@@ -36,7 +36,6 @@ angular.module 'vault'
       @crt(decryptedToP, decryptedToQ)
 
     serialize: (pub) ->
-      console.log(JSON.stringify(base64js.fromByteArray(@_lambda.toByteArray())))
       {
         'kty': 'DAJ'
         'key_ops': ['decrypt']
