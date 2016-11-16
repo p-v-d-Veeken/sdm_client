@@ -77,11 +77,13 @@ angular.module 'vault'
 
   $scope.createRecord = ->
     VaultApi.postClientsByClientIdRecordsPost({
-      'clientId': 0 # TODO set the right client id
+      'clientId': $scope.clientId # TODO set the right client id
       'data': {
         'record': {
-          'key': $scope.newRecord.key
-          'value': $scope.newRecord.value
+          'key': base64js.fromByteArray(new Uint8Array(
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.newRecord.key).toByteArray()))
+          'value': base64js.fromByteArray(new Uint8Array(
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.newRecord.value).toByteArray()))
         }
         'keyring': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
