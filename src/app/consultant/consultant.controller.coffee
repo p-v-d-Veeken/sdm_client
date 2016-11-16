@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ConsultantController', ($scope, $http, VaultApi, PaillierHandler, PrivateKey, $timeout) ->
+.controller 'ConsultantController', ($scope, $http, VaultApi, PaillierHandler) ->
   'ngInject'
 
   $scope.types = {
@@ -67,11 +67,19 @@ angular.module 'vault'
   $scope.client = {}
 
   $scope.searchDB = ->
-    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':{
-      'query':$scope.constraints
-      'keyringData': {
-        'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
-      }
+    VaultApi.postClientsByClientIdRecordsGet({
+      'clientId':$scope.client.id
+      'data':{
+        'query': $scope.constraints.map((constraint) ->
+          {
+            'column': constraint.type
+            'value': constraint.compare
+            'operator': constraint.equation
+          }
+        )
+        'keyringData': {
+          'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+        }
     }})
 
   $scope.addClient = ->
@@ -94,7 +102,12 @@ angular.module 'vault'
     VaultApi.postClientsByClientIdRecordsPost({
       'clientId':$scope.client.id
       'data':{
-        'record':$scope.record
+        'record': {
+          'key': base64js.fromByteArray(new Uint8Array(
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.record.key).toByteArray()))
+          'value': base64js.fromByteArray(new Uint8Array(
+            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.record.value).toByteArray()))
+        }
         'keyringData': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
         }
