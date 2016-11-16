@@ -13,6 +13,6 @@
         <label>Password</label>
         <input ng-model="password" type="password" ng-disabled="!_loaded">
     </md-input-container>
-    <button type="submit" md-button class="md-raised md-primary" ng-click="unlockPrivateKeyring()" ng-disabled="!_loaded">Unlock</button>
+    <button type="submit" md-button class="md-raised md-primary" ng-disabled="!_loaded">Unlock</button>
 </form>
 <md-button class="md-primary md-raised" ng-click="bundleKeyring()" ng-disabled="!unlocked()">Bundle and download</md-button>

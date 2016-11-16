@@ -2,9 +2,13 @@
 <form>
   <md-input-container>
       <label>Client ID</label>
-      <input ng-model="client.id">
+      <md-select ng-model="client.id" ng-change="updateQuery()">
+          <md-option md-option-empty value="">Select</md-option>
+          <md-option ng-repeat="(_, client) in clients" value="{{client.id}}">
+              ({{client.id}}) {{client.fname}} {{client.lname}}
+          </md-option>
+      </md-select>
   </md-input-container>
-  <button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
 </form>
 <form>
     <div layout="row">
@@ -35,6 +39,7 @@
     </div>
 
     <button type="submit" md-button class="md-raised md-primary" ng-click="addItem()">Add</button>
+    <button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
 </form>
 
 <md-table-container>
