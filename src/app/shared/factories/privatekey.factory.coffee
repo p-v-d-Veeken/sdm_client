@@ -35,4 +35,13 @@ angular.module 'vault'
 
       @crt(decryptedToP, decryptedToQ)
 
+    serialize: (pub) ->
+      sk = {}
+      sk.kty = "DAJ"
+      sk.key_ops = ["decrypt"]
+      sk.pub = pub.serialize
+      sk.lamda = window.btoa(@_lambda.toString())
+
+      sk
+
   PrivateKey
