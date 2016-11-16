@@ -50,6 +50,12 @@ angular.module 'vault'
     $scope.constraints = $scope.constraints.splice index, 1
     $scope.constraints = [] if $scope.constraints.length < 2
 
+  encryptData = (data) ->
+    base64js.fromByteArray(new Uint8Array(
+      $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
+        new BigInteger(EncodingHelper.string2bin(data))
+      ).toByteArray()))
+
   $scope.executeSearch = ->
     if !$scope.clientId?
       return
@@ -59,7 +65,7 @@ angular.module 'vault'
         'query': $scope.constraints.map((constraint) ->
           {
             'column': constraint.type
-            'value': constraint.compare
+            'value': encryptData constraint.compare
             'operator': constraint.equation
           }
         )
@@ -83,18 +89,13 @@ angular.module 'vault'
   $scope.createRecord = ->
     if !$scope.clientId?
       return
+
     VaultApi.postClientsByClientIdRecordsPost({
       'clientId': $scope.clientId
       'data': {
         'record': {
-          'key': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
-              new BigInteger(EncodingHelper.string2bin($scope.newRecord.key))
-            ).toByteArray()))
-          'value': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
-              new BigInteger(EncodingHelper.string2bin($scope.newRecord.value))
-            ).toByteArray()))
+          'key': encryptData $scope.newRecord.key
+          'value': encryptData $scope.newRecord.value
         }
         'keyring': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification

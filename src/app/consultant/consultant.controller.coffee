@@ -48,6 +48,12 @@ angular.module 'vault'
 
   $scope.paillier = PaillierHandler
 
+  encryptData = (data, clientId) ->
+    base64js.fromByteArray(new Uint8Array(
+      $scope.paillier.publicKeyRing.keys[clientId].encrypt(
+        new BigInteger(EncodingHelper.string2bin(data))
+      ).toByteArray()))
+
   $scope.generateKeyring = (index) ->
     console.log("generating keyring")
 
@@ -68,12 +74,12 @@ angular.module 'vault'
 
   $scope.searchDB = ->
     VaultApi.postClientsByClientIdRecordsGet({
-      'clientId':$scope.client.id
+      'clientId': $scope.client.id
       'data':{
         'query': $scope.constraints.map((constraint) ->
           {
             'column': constraint.type
-            'value': constraint.compare
+            'value': encryptData constraint.compare, $scope.client.id
             'operator': constraint.equation
           }
         )
@@ -103,10 +109,8 @@ angular.module 'vault'
       'clientId':$scope.client.id
       'data':{
         'record': {
-          'key': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.record.key).toByteArray()))
-          'value': base64js.fromByteArray(new Uint8Array(
-            $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt($scope.record.value).toByteArray()))
+          'key': encryptData $scope.record.key, $scope.client.id
+          'value': encryptData $scope.record.value, $scope.client.id
         }
         'keyringData': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
