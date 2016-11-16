@@ -40,7 +40,7 @@ angular.module 'vault'
       {
         'alg': 'PAI-GN1'
         'kty': 'DAj'
-        'n': btoa @n.toString(10)
+        'n': base64js.fromByteArray(new Uint8Array(@n.toByteArray()))
         'key_ops': ['encrypt']
       }
 

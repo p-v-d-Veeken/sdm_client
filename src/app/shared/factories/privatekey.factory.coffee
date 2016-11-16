@@ -36,11 +36,12 @@ angular.module 'vault'
       @crt(decryptedToP, decryptedToQ)
 
     serialize: (pub) ->
+      console.log(JSON.stringify(base64js.fromByteArray(@_lambda.toByteArray())))
       {
         'kty': 'DAJ'
         'key_ops': ['decrypt']
         'pub': pub.serialize()
-        'lambda': btoa @_lambda.toString()
+        'lambda': base64js.fromByteArray(new Uint8Array(@_lambda.toByteArray()))
       }
 
   PrivateKey
