@@ -54,25 +54,32 @@ angular.module 'vault'
     console.log("generating keyring")
 
   $scope.privateKeyringLoaded = ->
-    VaultApi.postClientsGet({'keyringData':$scope.paillier.privateKeyRing.toString()})
-     .then( (data) ->
-       this.$scope.clients = data
-     , (error) ->
-       console.log error
-     )
+    VaultApi.postClientsGet({
+      'keyringData':$scope.paillier.privateKeyRing.toString()
+    }).then( (data) ->
+      this.$scope.clients = data
+    , (error) ->
+      console.log error
+    )
 
   $scope.publicKeyringLoaded = ->
 
   $scope.client = {}
 
   $scope.searchDB = ->
-    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':{'query':$scope.constraints,
-      'keyringData':$scope.paillier.privateKeyRing.toString()}})
+    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':{
+      'query':$scope.constraints
+      'keyringData':$scope.paillier.privateKeyRing.toString()
+    }})
 
   $scope.addClient = ->
     $scope.clients.push(angular.copy($scope.add))
-    VaultApi.postClientsPost({'data':{'client':$scope.add,'keyringData':$scope.paillier.privateKeyRing.toString()}})
-    .then ( (data) ->
+    VaultApi.postClientsPost({
+      'data':{
+        'client':$scope.add
+        'keyringData':$scope.paillier.privateKeyRing.toString()
+      }
+    }).then( (data) ->
       console.log("Added a new user")
     , (error) ->
       console.log error
@@ -80,9 +87,13 @@ angular.module 'vault'
     $scope.add = {}
 
   $scope.addRecord = ->
-    VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.client.id,
-      'data':{'record':$scope.record,'keyringData':$scope.paillier.privateKeyRing.toString()}})
-    .then ( (data) ->
+    VaultApi.postClientsByClientIdRecordsPost({
+      'clientId':$scope.client.id
+      'data':{
+        'record':$scope.record
+        'keyringData':$scope.paillier.privateKeyRing.toString()
+      }
+    }).then( (data) ->
       console.log("Added a record")
       $scope.client = {}
       $scope.record = {}
