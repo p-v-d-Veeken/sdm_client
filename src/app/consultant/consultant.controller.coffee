@@ -7,19 +7,19 @@ angular.module 'vault'
       name: "Key"
       value: "KEY"
       equations: {
-        "∈": "in",
-        "=": "=",
+        "∈": "IN",
+        "=": "EQUAL",
       }
     }
     "VALUE": {
       name: "Value"
       value: "VALUE"
       equations: {
-        "<": "<"
-        "≤": "<="
-        "=": "="
-        ">": ">"
-        "≥": ">="
+        "<": "LESS_THAN"
+        "≤": "LESS_THAN_OR_EQUAL_TO"
+        "=": "EQUAL"
+        ">": "GREATER_THAN"
+        "≥": "GREATER_THAN_OR_EQUAL_TO"
       }
     }
   }
@@ -78,9 +78,9 @@ angular.module 'vault'
       'data':{
         'query': $scope.constraints.map((constraint) ->
           {
-            'column': constraint.type
-            'value': encryptData constraint.compare, $scope.client.id
-            'operator': constraint.equation
+            'column': constraint.column
+            'value': encryptData constraint.value, $scope.client.id
+            'operator': constraint.operator
           }
         )
         'keyringData': {

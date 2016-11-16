@@ -9,19 +9,19 @@ angular.module 'vault'
       name: "Key"
       value: "KEY"
       equations: {
-        "∈": "in",
-        "=": "=",
+        "∈": "IN",
+        "=": "EQUAL",
       }
     }
     "VALUE": {
       name: "Value"
       value: "VALUE"
       equations: {
-        "<": "<"
-        "≤": "<="
-        "=": "="
-        ">": ">"
-        "≥": ">="
+        "<": "LESS_THAN"
+        "≤": "LESS_THAN_OR_EQUAL_TO"
+        "=": "EQUAL"
+        ">": "GREATER_THAN"
+        "≥": "GREATER_THAN_OR_EQUAL_TO"
       }
     }
   }
