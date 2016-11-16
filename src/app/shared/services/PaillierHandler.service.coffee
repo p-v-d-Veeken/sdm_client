@@ -32,7 +32,10 @@ angular.module 'vault'
       @_loaded = true
       
     toString: ->
-      JSON.stringify @keys
+      jsonObj = {}
+      for id, key of @keys
+        jsonObj[id] = key.serialize paillierHandler.publicKeyRing.keys[id]
+      JSON.stringify jsonObj
 
     toByteArray: ->
       EncodingHelper.hex2bin(@_iv.toString()).concat EncodingHelper.hex2bin(@_enc_keyring.toString())
@@ -81,4 +84,5 @@ angular.module 'vault'
         catch e
           reject(e)
 
-  new PaillierHandler()
+  paillierHandler = new PaillierHandler()
+  paillierHandler
