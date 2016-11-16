@@ -96,4 +96,3 @@ angular.module 'vault'
     , (error) ->
       console.log error
     )
-

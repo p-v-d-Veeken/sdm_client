@@ -54,7 +54,7 @@ angular.module 'vault'
     console.log("generating keyring")
 
   $scope.privateKeyringLoaded = ->
-    VaultApi.postClientsGet({'keyringData':$scope.paillier.publicKeyRing.toString()})
+    VaultApi.postClientsGet({'keyringData':$scope.paillier.privateKeyRing.toString()})
      .then( (data) ->
        this.$scope.clients = data
      , (error) ->
@@ -66,22 +66,29 @@ angular.module 'vault'
   $scope.client = {}
 
   $scope.searchDB = ->
-    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':$scope.constraints})
+    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':{'query':$scope.constraints,
+      'keyringData':$scope.paillier.privateKeyRing.toString()}})
 
   $scope.addClient = ->
     $scope.clients.push(angular.copy($scope.add))
-    VaultApi.postClientsPost({'data':{'client':$scope.add,'keyringData':$scope.paillier.publicKeyRing.toString()}})
-    $scope.add = {}
-    console.log("client added")
-
-  $scope.addRecord = ->
-    VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.client.id, 'data':$scope.record})
+    VaultApi.postClientsPost({'data':{'client':$scope.add,'keyringData':$scope.paillier.privateKeyRing.toString()}})
     .then ( (data) ->
-      console.log("success")
+      console.log("Added a new user")
     , (error) ->
       console.log error
     )
-    $scope.record = {}
+    $scope.add = {}
+
+  $scope.addRecord = ->
+    VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.client.id,
+      'data':{'record':$scope.record,'keyringData':$scope.paillier.privateKeyRing.toString()}})
+    .then ( (data) ->
+      console.log("Added a record")
+      $scope.client = {}
+      $scope.record = {}
+    , (error) ->
+      console.log error
+    )
 
   $scope.deleteRecord = (index) ->
     VaultApi.postClientsByClientIdRecordsByRecordIdDelete({'clientId':$scope.client.id, 'recordId':index})
