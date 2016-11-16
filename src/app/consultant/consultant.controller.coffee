@@ -46,7 +46,6 @@ angular.module 'vault'
 
   nop = ->
 
-
   $scope.clients = []
 
   $scope.paillier = PaillierHandler
@@ -55,21 +54,23 @@ angular.module 'vault'
     console.log("generating keyring")
 
   $scope.privateKeyringLoaded = ->
-    $scope.clients = VaultApi.postClientsGet({'keyring':$scope.paillier.publicKeyRing.toString()})
+    $scope.clients = VaultApi.postClientsGet({'keyringData':$scope.paillier.publicKeyRing.toString()})
 
   $scope.publicKeyringLoaded = ->
 
+  $scope.client = {}
+
   $scope.searchDB = ->
-    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.clientID,'data':$scope.constraints})
+    VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':$scope.constraints})
 
   $scope.addClient = ->
     $scope.clients.push(angular.copy($scope.add))
-    VaultApi.postClientsPost({'data':{'client':$scope.add,'keyring':$scope.paillier.publicKeyRing.toString()}})
+    VaultApi.postClientsPost({'data':{'client':$scope.add,'keyringData':$scope.paillier.publicKeyRing.toString()}})
     $scope.add = {}
     console.log("client added")
 
   $scope.addRecord = ->
-    VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.clientId, 'data':$scope.record})
+    VaultApi.postClientsByClientIdRecordsPost({'clientId':$scope.client.id, 'data':$scope.record})
     $scope.record = {}
 
 

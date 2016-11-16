@@ -1,9 +1,11 @@
 <h1>Search for records</h1>
-<md-input-container>
-    <label>Client ID</label>
-    <input ng-model="clientID">
-</md-input-container>
-<button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
+<form>
+  <md-input-container>
+      <label>Client ID</label>
+      <input ng-model="client.id">
+  </md-input-container>
+  <button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
+</form>
 <form>
     <div layout="row">
         <md-input-container>
