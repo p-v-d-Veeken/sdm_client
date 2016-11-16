@@ -51,8 +51,10 @@ angular.module 'vault'
     $scope.constraints = [] if $scope.constraints.length < 2
 
   $scope.executeSearch = ->
+    if !$scope.clientId?
+      return
     VaultApi.postClientsByClientIdRecordsGet({
-      'clientId': 0 # TODO set the right client id
+      'clientId': $scope.clientId
       'data': {
         'query': $scope.constraints.map((constraint) ->
           {
@@ -74,10 +76,15 @@ angular.module 'vault'
   $scope.privateKeyringLoaded = ->
 
   $scope.publicKeyringLoaded = ->
+    for uid, _ of $scope.paillier.publicKeyRing.keys
+      $scope.clientId = parseInt(uid)
+      return
 
   $scope.createRecord = ->
+    if !$scope.clientId?
+      return
     VaultApi.postClientsByClientIdRecordsPost({
-      'clientId': $scope.clientId # TODO set the right client id
+      'clientId': $scope.clientId
       'data': {
         'record': {
           'key': base64js.fromByteArray(new Uint8Array(

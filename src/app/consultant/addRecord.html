@@ -2,8 +2,13 @@
 <form>
     <div layout="row">
         <md-input-container>
-                <label>Client id</label>
-                <input ng-model="client.id">
+            <label>Client id</label>
+            <md-select ng-model="client.id" ng-change="updateQuery()">
+                <md-option md-option-empty value="">Select</md-option>
+                <md-option ng-repeat="(_, client) in clients" value="{{client.id}}">
+                    ({{client.id}}) {{client.fname}} {{client.lname}}
+                </md-option>
+            </md-select>
         </md-input-container>
 
         <md-input-container>

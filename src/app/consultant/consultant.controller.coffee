@@ -53,7 +53,9 @@ angular.module 'vault'
 
   $scope.privateKeyringLoaded = ->
     VaultApi.postClientsGet({
-      'keyringData':$scope.paillier.privateKeyRing.toString()
+      'keyringData': {
+        'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+      }
     }).then( (data) ->
       $scope.clients = data
     , (error) ->
@@ -67,7 +69,9 @@ angular.module 'vault'
   $scope.searchDB = ->
     VaultApi.postClientsByClientIdRecordsGet({'clientId':$scope.client.id,'data':{
       'query':$scope.constraints
-      'keyringData':$scope.paillier.privateKeyRing.toString()
+      'keyringData': {
+        'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+      }
     }})
 
   $scope.addClient = ->
@@ -75,7 +79,9 @@ angular.module 'vault'
     VaultApi.postClientsPost({
       'data':{
         'client':$scope.add
-        'keyringData':$scope.paillier.privateKeyRing.toString()
+        'keyringData': {
+          'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+        }
       }
     }).then( (data) ->
       console.log("Added a new user")
@@ -89,7 +95,9 @@ angular.module 'vault'
       'clientId':$scope.client.id
       'data':{
         'record':$scope.record
-        'keyringData':$scope.paillier.privateKeyRing.toString()
+        'keyringData': {
+          'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+        }
       }
     }).then( (data) ->
       console.log("Added a record")
@@ -100,9 +108,14 @@ angular.module 'vault'
     )
 
   $scope.deleteRecord = (index) ->
-    VaultApi.postClientsByClientIdRecordsByRecordIdDelete({'clientId':$scope.client.id, 'recordId':index})
-      .then( (data) ->
-        $scope.records = data
-      , (error) ->
-        console.log error
-      )
+    VaultApi.postClientsByClientIdRecordsByRecordIdDelete({
+      'clientId':$scope.client.id
+      'recordId':index
+      'keyringData': {
+        'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+      }
+    }).then( (data) ->
+      $scope.records = data
+    , (error) ->
+      console.log error
+    )
