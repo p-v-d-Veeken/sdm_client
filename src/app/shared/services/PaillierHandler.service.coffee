@@ -94,9 +94,13 @@ angular.module 'vault'
       parseInt(paillierHandler.privateKeyRing.keys[id].decrypt(EncodingHelper.base64Tobigint(value)).toString())
 
     decryptText: (value, id) ->
-      EncodingHelper.bin2string(
-        paillierHandler.privateKeyRing.keys[id].decrypt(EncodingHelper.base64Tobigint(value)).toByteArray()
-      )
+      result = ""
+
+      for item in value.split(" ")
+        result += EncodingHelper.bin2string(
+          paillierHandler.privateKeyRing.keys[id].decrypt(EncodingHelper.base64Tobigint(item)).toByteArray()
+        ) + " "
+      result.slice(0,-1)
 
   paillierHandler = new PaillierHandler()
   paillierHandler
