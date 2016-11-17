@@ -42,11 +42,11 @@ angular.module 'vault'
     $scope.equations = $scope.types[$scope.search.type].equations if $scope.types[$scope.search.type]?
 
   $scope.addItem = ->
-      if $scope.search.column? && $scope.search.operator? && $scope.search.value?
-        if($scope.search.column=="KEY")
-          for key in $scope.search.value.split(" ")
+      if $scope.search.type? && $scope.search.equation? && $scope.search.compare?
+        if($scope.search.type=="KEY")
+          for key in $scope.search.compare.split(" ")
             searchTemp = angular.copy($scope.search)
-            searchTemp.value = key
+            searchTemp.compare = key
             $scope.constraints.push(searchTemp)
         else
           $scope.constraints.push(angular.copy($scope.search))
