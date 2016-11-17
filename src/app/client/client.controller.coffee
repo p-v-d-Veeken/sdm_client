@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ClientController', ($scope, VaultApi, PaillierHandler, EncodingHelper) ->
+.controller 'ClientController', ($scope, VaultApi, PaillierHandler, $mdToast) ->
   'ngInject'
 
   $scope.paillier = PaillierHandler
@@ -50,23 +50,6 @@ angular.module 'vault'
     $scope.constraints = $scope.constraints.splice index, 1
     $scope.constraints = [] if $scope.constraints.length < 2
 
-  encryptData = (m) ->
-    result = ""
-    for item in m.split(" ")
-      result = result+$scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
-    result = result.slice(0,-1)
-    console.log result
-    result
-
-
-  decryptData2Num = (c) ->
-    parseInt($scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toString())
-
-  decryptData2String = (c) ->
-    EncodingHelper.bin2string(
-      $scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toByteArray()
-    )
-
   $scope.executeSearch = ->
     if !$scope.clientId?
       return
@@ -76,7 +59,7 @@ angular.module 'vault'
         'query': $scope.constraints.map((constraint) ->
           {
             'column': constraint.type
-            'value': encryptData constraint.compare
+            'value': $scope.paillier.encrypt constraint.compare, $scope.clientId
             'operator': constraint.equation
           }
         )
@@ -86,11 +69,12 @@ angular.module 'vault'
       }
     }).then( (data) ->
       for i in [0...data.length]
-        data[i].key = decryptData2String data[i].key
-        data[i].value = decryptData2Num data[i].value
+        data[i].key = $scope.paillier.decryptText data[i].key, $scope.clientId
+        data[i].value = $scope.paillier.decryptNumber data[i].value, $scope.clientId
 
       $scope.results = data
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )
 
@@ -109,19 +93,37 @@ angular.module 'vault'
       'clientId': $scope.clientId
       'data': {
         'record': {
-          'key': encryptData $scope.newRecord.key
-          'value': encryptData $scope.newRecord.value
+          'key': $scope.paillier.encrypt $scope.newRecord.key, $scope.clientId
+          'value': $scope.paillier.encrypt $scope.newRecord.value, $scope.clientId
         }
         'keyring': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
         }
       }
-    }).then( (data) ->
-      console.log data
+    }).then( ->
+      $mdToast.show $mdToast.simple().textContent("Record added").hideDelay(3000)
       $scope.newRecord = {
         key: ''
         value: 0
       }
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
+      console.log error
+    )
+
+  $scope.deleteRecord = (index, recordId) ->
+    if !$scope.clientId?
+      return
+    VaultApi.postClientsByClientIdRecordsByRecordIdDelete({
+      'clientId': $scope.clientId
+      'recordId': recordId
+      'keyringData': {
+        'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
+      }
+    }).then( ->
+      $mdToast.show $mdToast.simple().textContent("Record deleted").hideDelay(3000)
+      $scope.results.splice index, 1
+    , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )

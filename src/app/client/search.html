@@ -66,6 +66,7 @@
             <th md-column>Value</th>
             <th md-column>Created On</th>
             <th md-column>Last Modified On</th>
+            <th md-column>Delete</th>
         </tr>
         </thead>
         <tbody md-body>
@@ -75,6 +76,10 @@
             <td md-cell>{{result.value}}</td>
             <td md-cell>{{result.createdAt}}</td>
             <td md-cell>{{result.updatedAt}}</td>
+            <td md-cell>
+                <md-button class="md-icon-button" aria-label="More" ng-click="deleteRecord($index, result.id)">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </md-button>
         </tr>
         </tbody>
     </table>

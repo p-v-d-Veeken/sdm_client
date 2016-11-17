@@ -10,7 +10,7 @@
             <div class="md-padding" ng-include="'app/client/search.html'" layout="column" layout-align="center center">
             </div>
         </md-tab>
-        <md-tab label="Create" ng-disabled="!paillier.publicKeyRing.isLoaded()">
+        <md-tab label="Create" ng-disabled="!paillier.privateKeyRing.isLoaded()">
             <div class="md-padding" ng-include="'app/client/create.html'" layout="column" layout-align="center center">
             </div>
         </md-tab>

@@ -84,5 +84,19 @@ angular.module 'vault'
         catch e
           reject(e)
 
+    encrypt: (value, id) ->
+      result = ""
+      for item in new String(value).split(" ")
+        result = result + paillierHandler.publicKeyRing.keys[id].encrypt2Base64(EncodingHelper.string2bigint(item)) + " "
+      result.slice(0,-1)
+
+    decryptNumber: (value, id) ->
+      parseInt(paillierHandler.privateKeyRing.keys[id].decrypt(EncodingHelper.base64Tobigint(value)).toString())
+
+    decryptText: (value, id) ->
+      EncodingHelper.bin2string(
+        paillierHandler.privateKeyRing.keys[id].decrypt(EncodingHelper.base64Tobigint(value)).toByteArray()
+      )
+
   paillierHandler = new PaillierHandler()
   paillierHandler

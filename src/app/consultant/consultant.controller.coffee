@@ -1,5 +1,5 @@
 angular.module 'vault'
-.controller 'ConsultantController', ($scope, $http, VaultApi, PaillierHandler, EncodingHelper) ->
+.controller 'ConsultantController', ($scope, $http, VaultApi, PaillierHandler, EncodingHelper, $mdToast) ->
   'ngInject'
 
   $scope.types = {
@@ -48,13 +48,6 @@ angular.module 'vault'
 
   $scope.paillier = PaillierHandler
 
-  encryptData = (data, clientId) ->
-    result = ""
-    for item in m.split(" ")
-      result = result+$scope.paillier.publicKeyRing.keys[clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
-    result = result.slice(0,-1)
-    result
-
   $scope.generateKeyring = (index) ->
     console.log("generating keyring")
 
@@ -66,6 +59,7 @@ angular.module 'vault'
     }).then( (data) ->
       $scope.clients = data
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )
 
@@ -74,20 +68,32 @@ angular.module 'vault'
   $scope.client = {}
 
   $scope.searchDB = ->
+    if !$scope.client.id?
+      $mdToast.show $mdToast.simple().textContent("Client selection required").hideDelay(3000)
+      return
     VaultApi.postClientsByClientIdRecordsGet({
       'clientId': $scope.client.id
       'data':{
         'query': $scope.constraints.map((constraint) ->
           {
             'column': constraint.column
-            'value': encryptData constraint.value, $scope.client.id
+            'value': $scope.paillier.encrypt constraint.value, $scope.client.id
             'operator': constraint.operator
           }
         )
         'keyringData': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
         }
-    }})
+    }}).then( (data) ->
+      for i in [0...data.length]
+        data[i].key = $scope.paillier.decryptText data[i].key, $scope.client.id
+        data[i].value = $scope.paillier.decryptNumber data[i].value, $scope.client.id
+
+      $scope.results = data
+    , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
+      console.log error
+    )
 
   $scope.addClient = ->
     $scope.clients.push(angular.copy($scope.add))
@@ -98,42 +104,52 @@ angular.module 'vault'
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
         }
       }
-    }).then( (data) ->
-      console.log("Added a new user")
+    }).then( ->
+      $mdToast.show $mdToast.simple().textContent("User added").hideDelay(3000)
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )
     $scope.add = {}
 
   $scope.addRecord = ->
+    if !$scope.client.id?
+      $mdToast.show $mdToast.simple().textContent("Client selection required").hideDelay(3000)
+      return
     VaultApi.postClientsByClientIdRecordsPost({
       'clientId':$scope.client.id
       'data':{
         'record': {
-          'key': encryptData $scope.record.key, $scope.client.id
-          'value': encryptData $scope.record.value, $scope.client.id
+          'key': $scope.paillier.encrypt $scope.record.key, $scope.client.id
+          'value': $scope.paillier.encrypt $scope.record.value, $scope.client.id
         }
         'keyringData': {
           'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
         }
       }
-    }).then( (data) ->
-      console.log("Added a record")
+    }).then( ->
+      $mdToast.show $mdToast.simple().textContent("Record added").hideDelay(3000)
       $scope.client = {}
       $scope.record = {}
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )
 
-  $scope.deleteRecord = (index) ->
+  $scope.deleteRecord = (index, recordId) ->
+    if !$scope.client.id?
+      $mdToast.show $mdToast.simple().textContent("Client selection required").hideDelay(3000)
+      return
     VaultApi.postClientsByClientIdRecordsByRecordIdDelete({
-      'clientId':$scope.client.id
-      'recordId':index
+      'clientId': $scope.client.id
+      'recordId': recordId
       'keyringData': {
         'keyring': $scope.paillier.privateKeyRing.toString() # TODO serve correct keyring data for verification
       }
-    }).then( (data) ->
-      $scope.records = data
+    }).then( ->
+      $mdToast.show $mdToast.simple().textContent("Record deleted").hideDelay(3000)
+      $scope.results.splice index, 1
     , (error) ->
+      $mdToast.show $mdToast.simple().textContent("Oops something went wrong").hideDelay(3000)
       console.log error
     )
