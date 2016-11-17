@@ -35,7 +35,13 @@ angular.module 'vault'
 
   $scope.addItem = ->
     if $scope.search.column? && $scope.search.operator? && $scope.search.value?
-      $scope.constraints.push(angular.copy($scope.search))
+      if($scope.search.column=="KEY")
+        for key in $scope.search.value.split(" ")
+          searchTemp = angular.copy($scope.search)
+          searchTemp.value = key
+          $scope.constraints.push(searchTemp)
+      else
+        $scope.constraints.push(angular.copy($scope.search))
       $scope.search = {}
 
   $scope.deleteConstraint = (index) ->
