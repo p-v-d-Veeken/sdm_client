@@ -1,0 +1,98 @@
+<h1>Search for records</h1>
+<form>
+  <md-input-container>
+      <label>Client ID</label>
+      <md-select ng-model="client.id" ng-change="updateQuery()">
+          <md-option md-option-empty value="">Select</md-option>
+          <md-option ng-repeat="(_, client) in clients" value="{{client.id}}">
+              ({{client.id}}) {{client.fname}} {{client.lname}}
+          </md-option>
+      </md-select>
+  </md-input-container>
+</form>
+<form>
+    <div layout="row">
+        <md-input-container>
+            <label>Type</label>
+            <md-select ng-model="search.column" ng-change="updateQuery()">
+                <md-option md-option-empty value="">Select</md-option>
+                <md-option ng-repeat="(_, type) in types" value="{{type.value}}">
+                    {{type.name}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Compare</label>
+            <md-select ng-model="search.operator" ng-disabled="search.set == false">
+                <md-option md-option-empty value="">Select</md-option>
+                <md-option ng-repeat="(name, value) in equations" value="{{value}}">
+                    {{name}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container>
+            <label>Compare to</label>
+            <input ng-model="search.value">
+        </md-input-container>
+    </div>
+
+    <button type="submit" md-button class="md-raised md-primary" ng-click="addItem()">Add</button>
+    <button type="submit" md-button class="md-raised md-primary" ng-click="searchDB()">Search</button>
+</form>
+
+<md-table-container>
+    <md-subheader class="md-primary">Constraints</md-subheader>
+    <table md-table>
+        <thead md-head>
+        <tr md-row>
+            <th md-column>Type</th>
+            <th md-column>Compare</th>
+            <th md-column>To</th>
+            <th md-column>Delete</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row ng-repeat="constraint in constraints">
+            <td md-cell>{{constraint.column}}</td>
+            <td md-cell>{{constraint.operator}}</td>
+            <td md-cell>{{constraint.value}}</td>
+            <td md-cell>
+                <md-button class="md-icon-button" aria-label="More" ng-click="deleteConstraint($index)">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </md-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <md-subheader class="md-primary">Results</md-subheader>
+    <table md-table>
+        <thead md-head>
+        <tr md-row>
+            <th md-column>ID</th>
+            <th md-column>Key</th>
+            <th md-column>Value</th>
+            <th md-column>Created On</th>
+            <th md-column>Last Modified On</th>
+            <th md-column>Delete</th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row ng-repeat="result in results">
+            <td md-cell>{{result.id}}</td>
+            <td md-cell>{{result.key}}</td>
+            <td md-cell>{{result.value}}</td>
+            <td md-cell>{{result.createdAt}}</td>
+            <td md-cell>{{result.updatedAt}}</td>
+            <td md-cell>
+              <md-button class="md-icon-button" aria-label="More" ng-click="deleteRecord($index, result.id)">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </md-button>
+          </td>
+        </tr>
+        </tbody>
+    </table>
+</md-table-container>

@@ -1,0 +1,418 @@
+swagger: '2.0'
+info:
+  version: "1.0.1"
+  title: Searchable Encrypted Database
+  description: |
+    The API for accessing a searchable encrpyted database. This is part of a project for the Secure Data Management course.
+host: 'api.vault.maketek.nl'
+schemes:
+  - http
+produces:
+  - application/json
+paths:
+  /clients/get:
+    post:
+      description: |
+        Retrieves an array of all 'Client' entities.
+        Only permitted by the consultant
+      parameters:
+        - name: keyringData
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/KeyringData'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ApiClient"
+        400:
+          description: Something went wrong
+  /clients/post:
+    post:
+      description: |
+        Creates a new 'Client' enitity
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ClientBundle"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ClientBundle"
+        400:
+          description: Something went wrong
+  /clients/{clientId}/get:
+    post:
+      description: |
+        Retrieves a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: keyringData
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/KeyringData'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiClient"
+        400:
+          description: Something went wrong
+  /clients/{clientId}/put:
+    post:
+      description: |
+        Updates a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ClientBundle"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}/delete:
+    post:
+      description: |
+        Deletes a  'Client' entity.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: keyringData
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/KeyringData'
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records/get:
+    post:
+      description: |
+        Retrieves an array of all 'Record' entities owned by the client indicated with the clientId.
+        Only permitted by the consultant
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/QueryBundle"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ApiRecord"
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records/post:
+    post:
+      description: |
+        Creates a new 'Record' enitity for the owning client
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RecordBundle"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRecord"
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records/{recordId}/put:
+    post:
+      description: |
+        Updates a  'Record' entity owned by the client.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: recordId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RecordBundle"
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /clients/{clientId}/records/{recordId}/delete:
+    post:
+      description: |
+        Deletes a  'Record' entity owned by the client.
+        Only permitted by the consultant or the client itself
+      parameters:
+        - name: clientId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: recordId
+          in: path
+          type: integer
+          required: true
+          description: The ID of the client
+        - name: keyringData
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/KeyringData'
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /keyring/post:
+    post:
+      description: |
+        Call master keyring will be encrypted and stored on the server
+      consumes:
+        - application/zip
+      parameters:
+        - name: keyringData
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/KeyringData'
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Something went wrong
+  /keyring/retrieve/1/get:
+    post:
+      description: |
+        Call the master keyring retrieval method (step 1)
+      parameters:
+        - name: answer
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApiRetrievalAnswer"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRetrievalResponse"
+        400:
+          description: Something went wrong
+  /keyring/retrieve/2/get:
+    post:
+      description: |
+        Call the master keyring retrieval method (step 2)
+      parameters:
+        - name: answer
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApiRetrievalResponse"
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: "#/definitions/ApiRetrievalAnswer"
+        400:
+          description: Something went wrong
+  /keyring/retrieve/3/get:
+    post:
+      description: |
+        Call the master keyring retrieval method (step 3)
+      produces:
+        - application/zip
+      parameters:
+        - name: answer
+          in: query
+          required: true
+          type: string
+          description: Answer to the current step
+        - name: previous
+          in: query
+          required: true
+          type: string
+          description: The hashed answer to the previous step
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/KeyringData'
+        400:
+          description: Something went wrong
+
+definitions:
+  QueryBundle:
+    type: object
+    required:
+      - query
+      - keyringData
+    properties:
+      query:
+        type: array
+        items:
+          $ref: "#/definitions/Query"
+      keyringData:
+        $ref: '#/definitions/KeyringData'
+  ClientBundle:
+    type: object
+    required:
+      - keyringData
+      - client
+    properties:
+      client:
+        $ref: '#/definitions/ApiClient'
+      keyringData:
+        $ref: '#/definitions/KeyringData'
+  RecordBundle:
+    type: object
+    required:
+      - keyringData
+      - record
+    properties:
+      record:
+        $ref: '#/definitions/ApiRecord'
+      keyringData:
+        $ref: '#/definitions/KeyringData'
+  KeyringData:
+    type: object
+    required:
+      - keyring
+    properties:
+      keyring:
+        type: string
+        description: The unlocked keyring
+  ApiRetrievalResponse:
+    type: object
+    required:
+      - hash
+    properties:
+      hash:
+        type: string
+        description: The hashed answer to the question if it is correct
+  ApiRetrievalAnswer:
+    type: object
+    required:
+      - step
+      - answer
+      - previous
+    properties:
+      step:
+        type: integer
+        description: The current step in the process (out of 3)
+      answer:
+        type: string
+        description: Answer to the current step
+      previous:
+        type: string
+        description: The hashed answer to the previous step
+  Query:
+    type: object
+    required:
+      - column
+      - value
+      - operator
+    properties:
+      column:
+        type: string
+        description: The column you want to filter on
+        enum: ['KEY', 'VALUE']
+      value:
+        type: string
+        description: The value you want to compare the entry against, text for key and numeric for value
+      operator:
+        type: string
+        description: The operation to use for comparison
+        enum: ['<', '<=', '=', '>=', '>', 'in']
+  ApiClient:
+    type: object
+    required:
+      - fname
+      - lname
+      - email
+    properties:
+      id:
+        type: integer
+        description: The id of the client
+      fname:
+        type: string
+        description: The first name of the client
+      lname:
+        type: string
+        description: The last name of the client
+      email:
+        type: string
+        description: The email of the client
+      created_at:
+        type: string
+        description: The creation date
+      updated_at:
+        type: string
+        description: The update date
+  ApiRecord:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      id:
+        type: integer
+        description: The id of the record
+      key:
+        type: string
+        description: The key(s) of the record
+      value:
+        type: string
+        description: The value of the record
+      created_at:
+        type: string
+        description: The creation date
+      updated_at:
+        type: string
+        description: The update date

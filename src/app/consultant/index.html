@@ -1,1 +1,23 @@
-<h1>Consultant</h1>
+<div layout="row" layout-align="center center">
+  <md-tabs md-dynamic-height md-border-bottom flex="50">
+    <md-tab label="Keyring">
+      <div class="md-padding" layout="column" layout-align="center center">
+          <h1>Load consultant keyring</h1>
+          <keyring-handler on-private-keyring="privateKeyringLoaded" on-public-keyring="publicKeyringLoaded" paillier="paillier"></keyring-handler>
+      </div>
+    </md-tab>
+    <md-tab label="Search" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/search.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+    <md-tab label="Add Client" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/addClient.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+    <md-tab label="Add Record" ng-disabled="!paillier.privateKeyRing.isLoaded()">
+      <div class="md-padding" ng-include="'app/consultant/addRecord.html'" layout="column" layout-align="center center">
+      </div>
+    </md-tab>
+  </md-tabs>
+</div>
+<div>{{decrypted}}</div>

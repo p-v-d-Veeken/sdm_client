@@ -27,4 +27,4 @@ function buildScripts() {
     //.pipe($.sourcemaps.write())
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve/app')))
     .pipe($.size())
-};
+}

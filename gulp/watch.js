@@ -37,6 +37,8 @@ gulp.task('watch', ['markups', 'inject'], function () {
     }
   });
 
+  gulp.watch(path.join(conf.paths.src, '/assets/api/swagger.yaml'), ['swagger-reload']);
+
   gulp.watch(path.join(conf.paths.src, '/app/**/*.haml'), ['markups']);
 
   gulp.watch(path.join(conf.paths.src, '/app/**/*.html'), function(event) {

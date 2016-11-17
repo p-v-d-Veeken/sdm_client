@@ -5,9 +5,11 @@ angular.module 'vault', [
   'ngCookies',
   'ngAria',
   'ngMaterial',
+  'lfNgMdFileInput',
   'ngMessages',
   'ui.mask',
   'ui.select',
   'oitozero.ngSweetAlert',
   'ngDialog',
+  'md.data.table'
 ]

@@ -1,0 +1,18 @@
+<form ng-submit="unlockPrivateKeyring()">
+    <lf-ng-md-file-input lf-files='keyringBundle' lf-placeholder="Keyring bundle"
+                         lf-drag-and-drop-label="Drop keyring bundle here"
+                         progress drag lf-api="filesApi">
+    </lf-ng-md-file-input>
+    <div class="error-container">
+        <div ng-repeat="(key, value) in errors" class="error">
+            <span class="error-key">{{key}}</span>
+            <span class="error-value">{{value}}</span>
+        </div>
+    </div>
+    <md-input-container>
+        <label>Password</label>
+        <input ng-model="password" type="password" ng-disabled="!_loaded">
+    </md-input-container>
+    <button type="submit" md-button class="md-raised md-primary" ng-disabled="!_loaded">Unlock</button>
+</form>
+<md-button class="md-primary md-raised" ng-click="bundleKeyring()" ng-disabled="!unlocked()">Bundle and download</md-button>
