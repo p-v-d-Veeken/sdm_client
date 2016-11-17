@@ -42,22 +42,22 @@ angular.module 'vault'
     $scope.equations = $scope.types[$scope.search.type].equations if $scope.types[$scope.search.type]?
 
   $scope.addItem = ->
-      if $scope.search.type? && $scope.search.equation? && $scope.search.compare?
-        if($scope.search.type=="KEY")
-          for key in $scope.search.compare.split(" ")
-            searchTemp = angular.copy($scope.search)
-            searchTemp.compare = key
-            $scope.constraints.push(searchTemp)
-        else
-          $scope.constraints.push(angular.copy($scope.search))
-        $scope.search = {}
+    if $scope.search.type? && $scope.search.equation? && $scope.search.compare?
+      $scope.constraints.push(angular.copy($scope.search))
+      $scope.search = {}
 
   $scope.deleteConstraint = (index) ->
     $scope.constraints = $scope.constraints.splice index, 1
     $scope.constraints = [] if $scope.constraints.length < 2
 
   encryptData = (m) ->
-    $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(m))
+    result = ""
+    for item in m.split(" ")
+      result = result+$scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
+    result = result.slice(0,-1)
+    console.log result
+    result
+
 
   decryptData2Num = (c) ->
     parseInt($scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toString())

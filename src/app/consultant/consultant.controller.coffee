@@ -35,13 +35,7 @@ angular.module 'vault'
 
   $scope.addItem = ->
     if $scope.search.column? && $scope.search.operator? && $scope.search.value?
-      if($scope.search.column=="KEY")
-        for key in $scope.search.value.split(" ")
-          searchTemp = angular.copy($scope.search)
-          searchTemp.value = key
-          $scope.constraints.push(searchTemp)
-      else
-        $scope.constraints.push(angular.copy($scope.search))
+      $scope.constraints.push(angular.copy($scope.search))
       $scope.search = {}
 
   $scope.deleteConstraint = (index) ->
@@ -55,10 +49,11 @@ angular.module 'vault'
   $scope.paillier = PaillierHandler
 
   encryptData = (data, clientId) ->
-    base64js.fromByteArray(new Uint8Array(
-      $scope.paillier.publicKeyRing.keys[clientId].encrypt(
-        new BigInteger(EncodingHelper.string2bin(data))
-      ).toByteArray()))
+    result = ""
+    for item in m.split(" ")
+      result = result+$scope.paillier.publicKeyRing.keys[clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
+    result = result.slice(0,-1)
+    result
 
   $scope.generateKeyring = (index) ->
     console.log("generating keyring")
