@@ -27,6 +27,12 @@ angular.module 'vault'
         i++
       array
 
+    string2bigint: (string) ->
+      new BigInteger(@string2bin(string))
+
+    base64Tobigint: (base64) ->
+      new BigInteger(base64js.toByteArray(base64))
+
     bin2string: (bin) ->
       str = ""
       buf = new Uint8Array bin

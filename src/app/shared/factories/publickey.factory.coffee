@@ -30,6 +30,13 @@ angular.module 'vault'
     encrypt: (m) ->
       @rawObfuscate(@rawEncryptNoObfuscation(m))
 
+    encrypt2Base64: (m) ->
+      base64js.fromByteArray(
+        new Uint8Array(
+          @encrypt(m).toByteArray()
+        )
+      )
+
     rawEncryptNoObfuscation: (m) ->
       @n.multiply(m).add(BigInteger.ONE).mod(@nSquare)
 

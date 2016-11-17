@@ -50,11 +50,16 @@ angular.module 'vault'
     $scope.constraints = $scope.constraints.splice index, 1
     $scope.constraints = [] if $scope.constraints.length < 2
 
-  encryptData = (data) ->
-    base64js.fromByteArray(new Uint8Array(
-      $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt(
-        new BigInteger(EncodingHelper.string2bin(data))
-      ).toByteArray()))
+  encryptData = (m) ->
+    $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(m))
+
+  decryptData2Num = (c) ->
+    parseInt($scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toString())
+
+  decryptData2String = (c) ->
+    EncodingHelper.bin2string(
+      $scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toByteArray()
+    )
 
   $scope.executeSearch = ->
     if !$scope.clientId?
@@ -74,7 +79,10 @@ angular.module 'vault'
         }
       }
     }).then( (data) ->
-      console.log data
+      for i in [0...data.length]
+        data[i].key = decryptData2String data[i].key
+        data[i].value = decryptData2Num data[i].value
+      console.log(data)
     , (error) ->
       console.log error
     )
