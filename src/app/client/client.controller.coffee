@@ -82,7 +82,8 @@ angular.module 'vault'
       for i in [0...data.length]
         data[i].key = decryptData2String data[i].key
         data[i].value = decryptData2Num data[i].value
-      console.log(data)
+
+      $scope.results = data
     , (error) ->
       console.log error
     )
