@@ -49,10 +49,11 @@ angular.module 'vault'
   $scope.paillier = PaillierHandler
 
   encryptData = (data, clientId) ->
-    base64js.fromByteArray(new Uint8Array(
-      $scope.paillier.publicKeyRing.keys[clientId].encrypt(
-        new BigInteger(EncodingHelper.string2bin(data))
-      ).toByteArray()))
+    result = ""
+    for item in m.split(" ")
+      result = result+$scope.paillier.publicKeyRing.keys[clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
+    result = result.slice(0,-1)
+    result
 
   $scope.generateKeyring = (index) ->
     console.log("generating keyring")

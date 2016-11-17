@@ -51,7 +51,13 @@ angular.module 'vault'
     $scope.constraints = [] if $scope.constraints.length < 2
 
   encryptData = (m) ->
-    $scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(m))
+    result = ""
+    for item in m.split(" ")
+      result = result+$scope.paillier.publicKeyRing.keys[$scope.clientId].encrypt2Base64(EncodingHelper.string2bigint(item))+" "
+    result = result.slice(0,-1)
+    console.log result
+    result
+
 
   decryptData2Num = (c) ->
     parseInt($scope.paillier.privateKeyRing.keys[$scope.clientId].decrypt(EncodingHelper.base64Tobigint(c)).toString())
