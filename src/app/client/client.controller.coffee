@@ -68,6 +68,8 @@ angular.module 'vault'
         }
       }
     }).then( (data) ->
+      if data.length == 0
+        $mdToast.show $mdToast.simple().textContent("No records found").hideDelay(3000)
       for i in [0...data.length]
         data[i].key = $scope.paillier.decryptText data[i].key, $scope.clientId
         data[i].value = $scope.paillier.decryptNumber data[i].value, $scope.clientId
